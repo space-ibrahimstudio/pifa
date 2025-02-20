@@ -1,0 +1,20 @@
+.sectionTitlewrap {
+  flex: 1;
+  border-left: var(--pixel-5) solid var(--color-hint);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: var(--pixel-5) var(--pixel-10);
+}
+
+.sectionHead {
+  align-self: stretch;
+  justify-content: flex-start;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--pixel-10);
+}

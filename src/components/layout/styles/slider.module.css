@@ -1,0 +1,29 @@
+.contentWrapper {
+  flex: 1;
+  display: inline-flex;
+  margin-right: var(--pixel-10);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.contentWrapper:last-child {
+  margin-right: 0;
+}
+
+.sectionBody,
+.sectionSlider {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.sectionSlider {
+  flex: 1;
+}
+
+.sectionBody {
+  position: relative;
+  align-self: stretch;
+  overflow: hidden;
+}

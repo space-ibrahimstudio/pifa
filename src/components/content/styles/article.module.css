@@ -1,0 +1,74 @@
+.articleBoard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  position: relative;
+  line-height: 135%;
+  font-weight: 500;
+  text-align: justify;
+  font-size: var(--font-sm);
+  color: var(--color-secondary);
+  font-family: var(--font-inter);
+}
+
+.articleBoard p {
+  margin-bottom: var(--pixel-15);
+}
+
+.articleBoard ul,
+.articleBoard ol {
+  margin-left: var(--pixel-20);
+  padding-left: var(--pixel-20);
+  margin-bottom: 0.5em;
+}
+
+.articleBoard ul {
+  list-style-type: disc;
+}
+
+.articleBoard ol {
+  list-style-type: decimal;
+}
+
+.articleBoard h1 {
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
+}
+
+.articleBoard h2 {
+  font-size: 2em;
+  margin-bottom: 0.5em;
+}
+
+.articleBoard a {
+  font-size: inherit;
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.articleBoard h1,
+.articleBoard h2,
+.articleBoard p,
+.articleBoard ul,
+.articleBoard ol,
+.articleBoard a,
+.articleBoard strong {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.articleBoard img,
+.articleBoard video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.articleBoard iframe {
+  border: 0;
+  width: 100%;
+  height: var(--pixel-270);
+}

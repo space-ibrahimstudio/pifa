@@ -1,0 +1,72 @@
+{
+  "short_name": "Pifa Net",
+  "name": "Pifa Net Web App",
+  "description": "Platform Informasi Terkini dan Teraktual, Kanal Aspirasi Netizen, dan Digital Market",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display_override": ["window-control-overlay", "standalone"],
+  "display": "fullscreen",
+  "theme_color": "#066ec3",
+  "background_color": "#f6f7f9",
+  "scope": "/",
+  "shortcuts": [
+    {
+      "name": "Berita Terbaru hari ini di Pifa Net",
+      "short_name": "Pifa Net: Terbaru",
+      "description": "Dapatkan informasi Terbaru seputar Teknologi, Lifestyle, Bola, dan lainnya hari ini, ekslusif hanya di Pifa Net",
+      "url": "/berita/insight/terbaru",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Berita Terpopuler hari ini di Pifa Net",
+      "short_name": "Pifa Net: Terpopuler",
+      "description": "Dapatkan informasi Terpopuler seputar Teknologi, Lifestyle, Bola, dan lainnya hari ini, ekslusif hanya di Pifa Net",
+      "url": "/berita/insight/populer",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Berita Trending hari ini di Pifa Net",
+      "short_name": "Pifa Net: Trending",
+      "description": "Dapatkan informasi Trending seputar Teknologi, Lifestyle, Bola, dan lainnya hari ini, ekslusif hanya di Pifa Net",
+      "url": "/berita/insight/trending",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Berita Rekomendasi hari ini di Pifa Net",
+      "short_name": "Pifa Net: Rekomendasi",
+      "description": "Dapatkan informasi Rekomendasi seputar Teknologi, Lifestyle, Bola, dan lainnya hari ini, ekslusif hanya di Pifa Net",
+      "url": "/berita/insight/rekomendasi",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "capture-narrow.png",
+      "type": "image/png",
+      "sizes": "540x1055",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "capture-wide.png",
+      "type": "image/png",
+      "sizes": "900x540",
+      "form_factor": "wide"
+    }
+  ]
+}
