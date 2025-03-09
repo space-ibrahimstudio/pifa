@@ -1,6 +1,6 @@
 {
-  "name": "pifanews-react",
-  "version": "0.1.0",
+  "name": "pifa-sub",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@ibrahimstudio/button": "^1.3.0",
