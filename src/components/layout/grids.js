@@ -21,15 +21,6 @@ const Grid = ({ id, gridTemplateRows = "unset", gridTemplateColumns = "unset", f
           }
         } else return child;
       })}
-      {/* {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: sectionid }) : fragmentChild))}</Fragment>;
-          }
-          return React.cloneElement(child, { id: sectionid });
-        }
-        return child;
-      })} */}
     </section>
   );
 };

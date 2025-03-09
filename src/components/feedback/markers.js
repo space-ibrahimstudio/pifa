@@ -53,15 +53,6 @@ const SectionHead = ({ id, noSource = false, to, children }) => {
             }
           } else return child;
         })}
-        {/* {React.Children.map(children, (child) => {
-          if (React.isValidElement(child)) {
-            if (child.type === Fragment) {
-              return <Fragment>{React.Children.map(child.props.children, (frag_child) => (React.isValidElement(frag_child) ? React.cloneElement(frag_child, { id: compid }) : frag_child))}</Fragment>;
-            }
-            return React.cloneElement(child, { id: compid });
-          }
-          return child;
-        })} */}
       </header>
       {!noSource && <SourceButton id={compid} to={headto} />}
     </section>
