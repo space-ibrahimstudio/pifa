@@ -94,7 +94,6 @@
       "/informasi/pedoman-media-siber"
     ],
     "removeBlobs": true,
-    "fixWebpackChunksIssue": true,
     "minifyHtml": {
       "collapseWhitespace": true,
       "removeComments": true
