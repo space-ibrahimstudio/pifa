@@ -31,7 +31,7 @@ function App() {
       <Route path="/berita/:slug" element={<PostPage />} />
       <Route path="/berita/tag/:slug" element={<TagPage />} />
       <Route path="/pencarian/:query" element={<SearchPage />} />
-      <Route path="/login" element={isLoggedin ? <Navigate to="/dashboard" replace /> : <LoginPage />} />
+      <Route path="/login" element={<LoginPage />} />
       {/* no-index redirect */}
       <Route path="/informasi" element={<Navigate to="/informasi/pedoman-media-siber" replace />} />
       <Route path="/berita" element={<Navigate to="/berita/insight/trending" replace />} />
