@@ -51,4 +51,4 @@ if (process.env.NODE_ENV === "production") {
   reportWebVitals(sendtoLog);
 }
 
-serviceWorkerRegistration.register();
+serviceWorkerRegistration.unregister();
