@@ -28,9 +28,7 @@ registerRoute(
 );
 
 self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "SKIP_WAITING") {
-    self.skipWaiting();
-  }
+  if (event.data && event.data.type === "SKIP_WAITING") self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
@@ -39,9 +37,7 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((cacheNames) =>
       Promise.all(
         cacheNames.map((cacheName) => {
-          if (!cacheWhitelist.includes(cacheName)) {
-            return caches.delete(cacheName);
-          }
+          if (!cacheWhitelist.includes(cacheName)) return caches.delete(cacheName);
         })
       )
     )
@@ -57,7 +53,5 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-  if (event.request.mode === "navigate") {
-    event.respondWith(fetch(event.request).catch(() => caches.match(OFFLINE_URL)));
-  }
+  if (event.request.mode === "navigate") event.respondWith(fetch(event.request).catch(() => caches.match(OFFLINE_URL)));
 });

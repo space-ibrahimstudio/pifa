@@ -3,10 +3,7 @@ const isLocalhost = Boolean(window.location.hostname === "localhost" || window.l
 export function register(config) {
   if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
-    if (publicUrl.origin !== window.location.origin) {
-      return;
-    }
-
+    if (publicUrl.origin !== window.location.origin) return;
     window.addEventListener("load", () => {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
       if (isLocalhost) {
@@ -14,17 +11,13 @@ export function register(config) {
         navigator.serviceWorker.ready.then(() => {
           console.log("This web app is being served cache-first by a service " + "worker. To learn more, visit https://cra.link/PWA");
         });
-      } else {
-        registerValidSW(swUrl, config);
-      }
+      } else registerValidSW(swUrl, config);
     });
   }
 }
 
 function showUpdateNotification() {
-  if (window.confirm("New version available. Do you want to refresh?")) {
-    window.location.reload();
-  }
+  if (window.confirm("New version available. Do you want to refresh?")) window.location.reload();
 }
 
 function registerValidSW(swUrl, config) {
@@ -38,20 +31,14 @@ function registerValidSW(swUrl, config) {
             if (installingWorker.state === "installed") {
               if (navigator.serviceWorker.controller) {
                 showUpdateNotification();
-                if (config && config.onUpdate) {
-                  config.onUpdate(registration);
-                }
+                if (config && config.onUpdate) config.onUpdate(registration);
               } else {
                 console.log("Content is cached for offline use.");
-                if (config && config.onSuccess) {
-                  config.onSuccess(registration);
-                }
+                if (config && config.onSuccess) config.onSuccess(registration);
               }
             }
           };
-        } else {
-          return;
-        }
+        } else return;
       };
     })
     .catch((error) => {
@@ -71,9 +58,7 @@ function checkValidServiceWorker(swUrl, config) {
             window.location.reload();
           });
         });
-      } else {
-        registerValidSW(swUrl, config);
-      }
+      } else registerValidSW(swUrl, config);
     })
     .catch(() => {
       console.log("No internet connection found. App is running in offline mode.");
