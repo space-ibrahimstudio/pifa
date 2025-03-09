@@ -21,6 +21,7 @@ import bancss from "./styles/banner-card.module.css";
 export const ImageCard = ({ alt, src }) => {
   const compid = (alt && `Pifa image ${toPathname(alt)}`) || "Pifa image";
   const crdcss = { position: "absolute", top: "0", left: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", zIndex: "0" };
+
   const [imageSrc, setImageSrc] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -32,6 +33,7 @@ export const ImageCard = ({ alt, src }) => {
       setImageSrc(img.src);
       setIsLoaded(true);
     };
+
     img.onerror = () => setImageSrc("/img/fallback.jpg");
   }, [src]);
 

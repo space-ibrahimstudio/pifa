@@ -63,11 +63,8 @@ export const TabButtonGen = ({ id, text, type = "route", path, targetId, startCo
   const [activeTab, setActiveTab] = useState(null);
 
   const handleClick = () => {
-    if (type === "scroll") {
-      scroll(targetId, -70);
-    } else {
-      navigate(path);
-    }
+    if (type === "scroll") scroll(targetId, -70);
+    else navigate(path);
   };
 
   useEffect(() => {

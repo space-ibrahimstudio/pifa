@@ -4,9 +4,7 @@ const axios = require("axios");
 const { parseStringPromise, Builder } = require("xml2js");
 const moment = require("moment");
 const packageJson = require("./package.json");
-if (!process.env.CI) {
-  require("dotenv").config({ path: ".env.development" });
-}
+if (!process.env.CI) require("dotenv").config({ path: ".env.development" });
 
 const domainURL = process.env.REACT_APP_DOMAIN_MAIN;
 const apiURL = process.env.REACT_APP_API_URL;
@@ -16,54 +14,45 @@ async function fetchCatSlug() {
     const url = `${apiURL}/main/categorynew`;
     const response = await axios.get(url);
     const slugdata = response.data;
-    if (!slugdata.error) {
-      return slugdata.data;
-    } else {
-      return [];
-    }
+    if (!slugdata.error) return slugdata.data;
+    else return [];
   } catch (error) {
     console.error("Error fetching category slugs:", error);
     process.exit(1);
   }
 }
 
-async function fetchPostSlug() {
-  const formData = new FormData();
-  formData.append("limit", "20");
-  formData.append("hal", "0");
-  try {
-    const url = `${apiURL}/main/latestnew`;
-    const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
-    const slugdata = response.data;
-    if (!slugdata.error) {
-      return slugdata.data;
-    } else {
-      return [];
-    }
-  } catch (error) {
-    console.error("Error fetching post slugs:", error);
-    process.exit(1);
-  }
-}
-
 // async function fetchPostSlug() {
 //   const formData = new FormData();
+//   formData.append("limit", "20");
+//   formData.append("hal", "0");
 //   try {
-//     formData.append("limit", "1000");
-//     formData.append("hal", "7000");
-//     const url = `${apiURL}/authapi/viewnews`;
+//     const url = `${apiURL}/main/latestnew`;
 //     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
 //     const slugdata = response.data;
-//     if (!slugdata.error) {
-//       return slugdata.data;
-//     } else {
-//       return [];
-//     }
+//     if (!slugdata.error) return slugdata.data;
+//     else return [];
 //   } catch (error) {
 //     console.error("Error fetching post slugs:", error);
 //     process.exit(1);
 //   }
 // }
+
+async function fetchPostSlug() {
+  const formData = new FormData();
+  try {
+    formData.append("limit", "1000");
+    formData.append("hal", "0");
+    const url = `${apiURL}/authapi/viewnews`;
+    const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
+    const slugdata = response.data;
+    if (!slugdata.error) return slugdata.data;
+    else return [];
+  } catch (error) {
+    console.error("Error fetching post slugs:", error);
+    process.exit(1);
+  }
+}
 
 async function updatePackageJson(catslugs, postslugs) {
   const updatedInclude = [
@@ -88,8 +77,8 @@ async function updatePackageJson(catslugs, postslugs) {
     ...catslugs.map((item) => `/berita/kategori/${item.slug}`),
     ...postslugs.map((item) => `/berita/${item.slug}`),
   ];
-  packageJson.reactSnap.include = updatedInclude;
 
+  packageJson.reactSnap.include = updatedInclude;
   fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 2));
   console.log("package.json updated successfully");
 }
@@ -105,14 +94,8 @@ async function generateSitemap(catslugs, postslugs) {
   const defaultLastmod = moment().format("YYYY-MM-DD");
 
   const createUrlNode = (loc, changefreq = "weekly", lastmod = null, priority = 0.8) => {
-    const node = {
-      loc: `${domain}${loc}`,
-      changefreq,
-      priority: priority.toFixed(1),
-    };
-    if (lastmod) {
-      node.lastmod = lastmod;
-    }
+    const node = { loc: `${domain}${loc}`, changefreq, priority: priority.toFixed(1) };
+    if (lastmod) node.lastmod = lastmod;
     return node;
   };
 
@@ -131,6 +114,7 @@ async function generateSitemap(catslugs, postslugs) {
     { loc: "/berita/insight/trending", changefreq: "daily", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
     { loc: "/berita/insight/rekomendasi", changefreq: "daily", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
   ];
+
   const dynamicUrls = [...catslugs.map((item) => ({ loc: `/berita/kategori/${item.slug}`, lastmod: item.updated_at ? moment(item.updated_at).format("YYYY-MM-DD") : defaultLastmod, priority: 0.8 })), ...postslugs.map((item) => ({ loc: `/berita/${item.slug}`, lastmod: item.updated_at ? moment(item.updated_at).format("YYYY-MM-DD") : defaultLastmod, priority: 0.8 }))];
   let existingUrls = [];
 
@@ -149,16 +133,13 @@ async function generateSitemap(catslugs, postslugs) {
     } catch (err) {
       console.error("Error parsing existing sitemap.xml:", err);
     }
-  } else {
-    console.log("sitemap.xml does not exist, creating a new one...");
-  }
+  } else console.log("sitemap.xml does not exist, creating a new one...");
 
   const urlMap = new Map(existingUrls.map((url) => [url.loc, url]));
 
   staticUrls.forEach((staticUrl) => {
-    if (!urlMap.has(`${domain}${staticUrl.loc}`)) {
-      urlMap.set(`${domain}${staticUrl.loc}`, createUrlNode(staticUrl.loc, staticUrl.changefreq, staticUrl.lastmod, staticUrl.priority));
-    } else {
+    if (!urlMap.has(`${domain}${staticUrl.loc}`)) urlMap.set(`${domain}${staticUrl.loc}`, createUrlNode(staticUrl.loc, staticUrl.changefreq, staticUrl.lastmod, staticUrl.priority));
+    else {
       const existingUrl = urlMap.get(`${domain}${staticUrl.loc}`);
       existingUrl.priority = "1.0";
     }
@@ -168,9 +149,7 @@ async function generateSitemap(catslugs, postslugs) {
     if (urlMap.has(`${domain}${newUrl.loc}`)) {
       const existingUrl = urlMap.get(`${domain}${newUrl.loc}`);
       existingUrl.lastmod = newUrl.lastmod;
-    } else {
-      urlMap.set(`${domain}${newUrl.loc}`, createUrlNode(newUrl.loc, "weekly", newUrl.lastmod, newUrl.priority));
-    }
+    } else urlMap.set(`${domain}${newUrl.loc}`, createUrlNode(newUrl.loc, "weekly", newUrl.lastmod, newUrl.priority));
   });
 
   const mergedUrls = Array.from(urlMap.values());

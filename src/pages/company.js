@@ -22,12 +22,13 @@ const CompanyPage = () => {
   const { newDate } = useFormat();
   const { apiGet } = useApi();
   const { setLoading } = useLoading();
+
+  const id = (cslug && `${short}-${cslug}`) || `${short}-slug`;
+
   const [pageData, setPageData] = useState([]);
   const [pageInfo, setPageInfo] = useState({ title: "", desc: "", content: "", created: "", updated: "", path: "", thumbnail: "" });
   const [staticPostData, setStaticPostData] = useState([]);
   const [ads, setAds] = useState([]);
-
-  const id = (cslug && `${short}-${cslug}`) || `${short}-slug`;
 
   const fetchData = async () => {
     const errormsg = "Terjadi kesalahan saat memuat halaman. Mohon periksa koneksi internet anda dan coba lagi.";
@@ -139,13 +140,12 @@ const CompanyPage = () => {
   ];
 
   const renderAds = (item) => <AdBanner alt={item.idbanner} src={`${imgdomain}/images/banner/${item.bannerimg}`} />;
-
   const fetchBannerData = async () => {
     try {
       const response = await apiGet("main", "bannerview");
       setAds(response && response.data && response.data.length > 0 ? response.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching banner data:", error);
     }
   };
 
@@ -155,10 +155,7 @@ const CompanyPage = () => {
     fetchBannerData();
   }, [cslug]);
 
-  if (pageData === null) {
-    return <Navigate to="404-not-found" replace />;
-  }
-
+  if (pageData === null) return <Navigate to="404-not-found" replace />;
   return (
     <Fragment>
       <SEO title={pageInfo.title} description={pageInfo.content} route={pageInfo.path} extThumbSrc={pageInfo.thumbnail} isPost category="Company" author="Admin" />

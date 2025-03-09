@@ -27,6 +27,9 @@ const PostPage = () => {
   const { apiRead, apiGet } = useApi();
   const { setLoading } = useLoading();
   const { H1, Span, P } = useGraph();
+
+  const id = (slug && `${short}-${slug}`) || `${short}-slug`;
+
   const [pageInfo, setPageInfo] = useState({ title: "", cat: "", desc: "", path: "", cat_path: "", thumbnail: "" });
   const [postDetailData, setPostDetailData] = useState([]);
   const [postTags, setPostTags] = useState([]);
@@ -35,8 +38,6 @@ const PostPage = () => {
   const [trendingPostData, setTrendingPostData] = useState([]);
   const [ads, setAds] = useState([]);
   const [relatedPostData, setRelatedPostData] = useState([]);
-
-  const id = (slug && `${short}-${slug}`) || `${short}-slug`;
 
   const fetchDetailPost = async () => {
     setLoading(true);
@@ -51,21 +52,16 @@ const PostPage = () => {
         const catnews = await apiGet("main", "categorynew");
         if (catnews && catnews.data && catnews.data.length > 0) {
           const selectedcat = catnews.data.find((cat) => cat.id === selecteddata.berita.nama_kategori_berita_id);
-          if (selectedcat) {
-            setPageInfo({ title: selecteddata.berita.judul_berita, desc: selecteddata.berita.isi_berita, path: `/berita/${selecteddata.berita.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.berita.img_berita}`, cat: selectedcat.nama_kategori_berita, cat_path: `/berita/kategori/${selectedcat.slug}` });
-          } else {
-            setPageInfo({ title: selecteddata.berita.judul_berita, desc: selecteddata.berita.isi_berita, path: `/berita/${selecteddata.berita.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.berita.img_berita}`, cat: "N/A", cat_path: "/" });
-          }
-        } else {
-          setPageInfo({ title: selecteddata.berita.judul_berita, desc: selecteddata.berita.isi_berita, path: `/berita/${selecteddata.berita.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.berita.img_berita}`, cat: "N/A", cat_path: "/" });
-        }
+          if (selectedcat) setPageInfo({ title: selecteddata.berita.judul_berita, desc: selecteddata.berita.isi_berita, path: `/berita/${selecteddata.berita.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.berita.img_berita}`, cat: selectedcat.nama_kategori_berita, cat_path: `/berita/kategori/${selectedcat.slug}` });
+          else setPageInfo({ title: selecteddata.berita.judul_berita, desc: selecteddata.berita.isi_berita, path: `/berita/${selecteddata.berita.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.berita.img_berita}`, cat: "N/A", cat_path: "/" });
+        } else setPageInfo({ title: selecteddata.berita.judul_berita, desc: selecteddata.berita.isi_berita, path: `/berita/${selecteddata.berita.slug}`, thumbnail: `${imgdomain}/images/img_berita/${selecteddata.berita.img_berita}`, cat: "N/A", cat_path: "/" });
       } else {
         setPostDetailData(null);
         setPostTags([]);
         setPageInfo({ title: "", desc: "", path: "", thumbnail: "", cat: "", cat_path: "" });
       }
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching detail post:", error);
     } finally {
       setLoading(false);
     }
@@ -81,7 +77,7 @@ const PostPage = () => {
       const trendingdata = await apiRead(formData, "main", "trendingnew");
       setTrendingPostData(trendingdata && trendingdata.data && trendingdata.data.length > 0 ? trendingdata.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching trending posts:", error);
     } finally {
       setTrendLoading(false);
     }
@@ -95,7 +91,7 @@ const PostPage = () => {
       const postsdata = await apiRead(formData, "main", "relatednew");
       setRelatedPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching related posts:", error);
     }
   };
 
@@ -106,13 +102,12 @@ const PostPage = () => {
   ];
 
   const renderAds = (item) => <AdBanner alt={item.idbanner} src={`${imgdomain}/images/banner/${item.bannerimg}`} />;
-
   const fetchBannerData = async () => {
     try {
       const response = await apiGet("main", "bannerview");
       setAds(response && response.data && response.data.length > 0 ? response.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching banner data:", error);
     }
   };
 
@@ -130,10 +125,7 @@ const PostPage = () => {
     fetchDetailPost();
   }, [slug, location.pathname]);
 
-  if (postDetailData === null) {
-    return <Navigate to="404-not-found" replace />;
-  }
-
+  if (postDetailData === null) return <Navigate to="404-not-found" replace />;
   return (
     <Fragment>
       <SEO title={pageInfo.title} description={pageInfo.desc} route={pageInfo.path} extThumbSrc={pageInfo.thumbnail} isPost category={pageInfo.cat} author={postDetailData.penulis_berita} datecreate={postDetailData.created_at} dateupdate={postDetailData.updated_at} />

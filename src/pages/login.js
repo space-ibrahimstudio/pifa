@@ -14,7 +14,9 @@ const LoginPage = () => {
   const { short } = useDocument();
   const { isLoggedin, login } = useAuth();
   const { H1, P } = useGraph();
+
   const id = `${short}-login`;
+
   const [loading, setLoading] = useState(false);
   const [inputData, setInputData] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({ username: "", password: "" });
@@ -43,10 +45,7 @@ const LoginPage = () => {
     }
   };
 
-  if (isLoggedin) {
-    return <Navigate to="/" />;
-  }
-
+  if (isLoggedin) return <Navigate to="/" />;
   return (
     <Fragment>
       <SEO title="Login" route="/login" />

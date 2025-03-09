@@ -18,14 +18,8 @@ export function SEO({ title, description, route, thumbSrc, extThumbSrc, thumbAlt
     headline: metatitle,
     description: stripdesc,
     image: [thumbnail],
-    author: {
-      "@type": "Person",
-      name: author,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: company,
-    },
+    author: { "@type": "Person", name: author },
+    publisher: { "@type": "Organization", name: company },
     datePublished: pubdate,
     dateModified: moddate,
   };
@@ -36,12 +30,7 @@ export function SEO({ title, description, route, thumbSrc, extThumbSrc, thumbAlt
     name: company,
     logo: `${domain}/logo192.png`,
     url: domain,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Pontianak",
-      addressRegion: "Kalimantan Barat",
-      addressCountry: "Indonesia",
-    },
+    address: { "@type": "PostalAddress", addressLocality: "Pontianak", addressRegion: "Kalimantan Barat", addressCountry: "Indonesia" },
   };
 
   return (

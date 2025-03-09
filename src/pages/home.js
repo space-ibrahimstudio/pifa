@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import useApi from "../libs/plugins/apis";
 import { useDocument } from "../libs/plugins/helpers";
-import AdSense from "../libs/plugins/adsense";
 import { SEO } from "../libs/plugins/seo";
 import useGraph from "../components/content/graph";
 import SectionHead from "../components/feedback/markers";
@@ -17,13 +16,15 @@ import { AdBanner } from "../components/media/image";
 const imgdomain = process.env.REACT_APP_API_URL;
 
 const HomePage = () => {
-  const { width } = useWindow();
-  const { short } = useDocument();
   const navigate = useNavigate();
   const location = useLocation();
+  const { width } = useWindow();
+  const { short } = useDocument();
   const { apiRead, apiGet } = useApi();
   const { H1, Span } = useGraph();
+
   const id = `${short}-home`;
+
   const [limit, setLimit] = useState(13);
   const [loading, setLoading] = useState(false);
   const [trendingPostData, setTrendingPostData] = useState([]);
@@ -34,7 +35,7 @@ const HomePage = () => {
   const [latestPostData, setLatestPostData] = useState([]);
   const [popularPostData, setPopularPostData] = useState([]);
 
-  const renderLocalCat = (item) => <CatCard id={item.id} catname={item.nama_kategori_daerah} image={item.img} onClick={() => window.open(`https://${item.nama_kategori_daerah.toLowerCase().replace(" ", "")}.pifa.co.id`, "_blank")} />;
+  const renderLocalCat = (item) => <CatCard id={item.id} catname={item.nama_kategori_daerah} image={item.img} onClick={() => window.open(`https://${item.subdomain}.pifa.co.id`, "_blank")} />;
   const renderAds = (item) => <AdBanner alt={item.idbanner} src={`${imgdomain}/images/banner/${item.bannerimg}`} />;
 
   const fetchBannerData = async () => {
@@ -42,7 +43,7 @@ const HomePage = () => {
       const response = await apiGet("main", "bannerview");
       setAds(response && response.data && response.data.length > 0 ? response.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching banner data:", error);
     }
   };
 
@@ -51,7 +52,7 @@ const HomePage = () => {
       const response = await apiGet("main", "categorynew");
       setCatNewsData(response && response.data && response.data.length > 0 ? response.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching category data:", error);
     }
   };
 
@@ -60,7 +61,7 @@ const HomePage = () => {
       const response = await apiGet("main", "categoryarea");
       setCatLocalData(response && response.data && response.data.length > 0 ? response.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching local category data:", error);
     }
   };
 
@@ -69,7 +70,7 @@ const HomePage = () => {
       const response = await apiGet("main", "viewtag");
       setTrendTagData(response && response.data && response.data.length > 0 ? response.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching trending tag data:", error);
     }
   };
 
@@ -83,7 +84,7 @@ const HomePage = () => {
       const trendingdata = await apiRead(formData, "main", "trendingnew");
       setTrendingPostData(trendingdata && trendingdata.data && trendingdata.data.length > 0 ? trendingdata.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching trending post data:", error);
     } finally {
       setLoading(false);
     }
@@ -97,7 +98,7 @@ const HomePage = () => {
       const postsdata = await apiRead(formData, "main", "latestnew");
       setLatestPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching latest posts:", error);
     }
   };
 
@@ -109,7 +110,7 @@ const HomePage = () => {
       const postsdata = await apiRead(formData, "main", "popularnew");
       setPopularPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching popular posts:", error);
     }
   };
 
@@ -157,7 +158,7 @@ const HomePage = () => {
         <Container id="trending-tag" alignItems="center" padding={width <= 910 ? (width > 700 ? "0 var(--pixel-30)" : "0 var(--pixel-20)") : "0 var(--pixel-70)"}>
           <Section isWrap justifyContent="center" padding="var(--pixel-10) 0" gap="var(--pixel-10)">
             {trendTagData.map((tag, index) => (
-              <TagsButton key={index} text={tag.nama_kategori_tag} onClick={() => navigate(`/berita/tag/${tag.slug}`)} />
+              <TagsButton id={tag.slug} key={index} text={tag.nama_kategori_tag} onClick={() => navigate(`/berita/tag/${tag.slug}`)} />
             ))}
           </Section>
         </Container>
@@ -208,9 +209,6 @@ const HomePage = () => {
             ))}
           </Section>
         </Container>
-        {/* <Container id="google-adsense" alignItems="center" justifyContent="center" gap="var(--pixel-10)">
-          <AdSense />
-        </Container> */}
         {combinedSections.map((section, index) => (
           <Fragment key={index}>
             {section.type === "ad" ? (

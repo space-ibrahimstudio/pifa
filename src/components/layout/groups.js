@@ -19,7 +19,9 @@ export const SectionGroup = ({ id, catId, scope, slug }) => {
   const location = useLocation();
   const { width } = useWindow();
   const { apiRead } = useApi();
+
   const compid = `${id}-section-group-${slug}`;
+
   const [latestLoading, setLatestLoading] = useState(false);
   const [trendingLoading, setTrendingLoading] = useState(false);
   const [latestLimit, setLatestLimit] = useState(6);
@@ -93,6 +95,7 @@ export const SectionGroup = ({ id, catId, scope, slug }) => {
 
 export const News3Group = ({ id, posts = [] }) => {
   const navigate = useNavigate();
+
   const compid = `${id}-3-group`;
   const basestyles = { display: "flex", alignItems: "center", justifyContent: "center" };
 
@@ -113,6 +116,7 @@ export const News3Group = ({ id, posts = [] }) => {
 export const CompanyGroup = ({ id, style, isPortrait = false, title, posts = [] }) => {
   const navigate = useNavigate();
   const { newDate } = useFormat();
+
   const compid = (title && `${id}-company-group-${toPathname(title)}`) || `${id}-company-group`;
 
   return (
@@ -139,20 +143,17 @@ export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, noSou
   const navigate = useNavigate();
   const ref = useRef(null);
   const { toPathname } = useContent();
+
   const compid = (title && `${id}-summary-group-${toPathname(title)}`) || `${id}-summary-group`;
 
   const handleScroll = () => {
     if (ref.current) {
       if (isPortrait) {
         const { scrollLeft, scrollWidth, clientWidth } = ref.current;
-        if (scrollLeft + clientWidth >= scrollWidth - 5 && !loading) {
-          setLimit((prevLimit) => prevLimit + 10);
-        }
+        if (scrollLeft + clientWidth >= scrollWidth - 5 && !loading) setLimit((prevLimit) => prevLimit + 10);
       } else {
         const { scrollTop, scrollHeight, clientHeight } = ref.current;
-        if (scrollTop + clientHeight >= scrollHeight - 5 && !loading) {
-          setLimit((prevLimit) => prevLimit + 10);
-        }
+        if (scrollTop + clientHeight >= scrollHeight - 5 && !loading) setLimit((prevLimit) => prevLimit + 10);
       }
     }
   };
@@ -193,8 +194,8 @@ export const NewsSummaryGroup = ({ id, style, variant, isPortrait = false, noSou
 
 export const FeedsGroup = ({ id, noFilter = false, postsFilter, setPostsFilter, setLimit, loading = false, children }) => {
   const ref = useRef(null);
-  const compid = `${id}-feeds-group`;
 
+  const compid = `${id}-feeds-group`;
   const switchFilter = [
     { label: "Terbaru", value: "latest" },
     { label: "Populer", value: "popular" },
@@ -205,9 +206,7 @@ export const FeedsGroup = ({ id, noFilter = false, postsFilter, setPostsFilter, 
   const handleScroll = () => {
     if (ref.current) {
       const { scrollTop, scrollHeight, clientHeight } = ref.current;
-      if (scrollTop + clientHeight >= scrollHeight - 5 && !loading) {
-        setLimit((prevLimit) => prevLimit + 10);
-      }
+      if (scrollTop + clientHeight >= scrollHeight - 5 && !loading) setLimit((prevLimit) => prevLimit + 10);
     }
   };
 
@@ -232,27 +231,22 @@ export const FeedsGroup = ({ id, noFilter = false, postsFilter, setPostsFilter, 
         {!noFilter && <Input id={`${compid}-switch-filter`} variant="select" noEmptyValue isLabeled={false} baseColor="var(--color-secondlight)" placeholder="Filter Jenis Berita" value={postsFilter} options={switchFilter} onSelect={switchStatus} />}
       </header>
       <div ref={ref} className={feecss.feedsBody}>
-        {/* {React.Children.map(children, (child) => {
+        {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
             if (child.type === Fragment) {
-              return (
-                <Fragment>
-                  {React.Children.map(child.props.children, (fragmentChild) => {
-                    if (React.isValidElement(fragmentChild)) {
-                      const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
-                      return React.cloneElement(fragmentChild, { id: combinedId });
-                    }
-                    return fragmentChild;
-                  })}
-                </Fragment>
-              );
+              return React.Children.map(child.props.children, (fragmentChild) => {
+                if (React.isValidElement(fragmentChild)) {
+                  const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
+                  return React.cloneElement(fragmentChild, { id: combinedId });
+                } else return fragmentChild;
+              });
+            } else {
+              const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
+              return React.cloneElement(child, { id: combinedId });
             }
-            const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
-            return React.cloneElement(child, { id: combinedId });
-          }
-          return child;
-        })} */}
-        {React.Children.map(children, (child) => {
+          } else return child;
+        })}
+        {/* {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
             if (child.type === Fragment) {
               return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
@@ -260,7 +254,7 @@ export const FeedsGroup = ({ id, noFilter = false, postsFilter, setPostsFilter, 
             return React.cloneElement(child, { id: compid });
           }
           return child;
-        })}
+        })} */}
         {loading && <LoadingContent />}
       </div>
     </section>
@@ -270,20 +264,17 @@ export const FeedsGroup = ({ id, noFilter = false, postsFilter, setPostsFilter, 
 const NewsGroup = ({ id, isPortrait = false, title = "Terbaru", scope = "", posts = [], setLimit, loading = false }) => {
   const navigate = useNavigate();
   const ref = useRef(null);
+
   const compid = `${id}-news-group`;
 
   const handleScroll = () => {
     if (ref.current) {
       if (isPortrait) {
         const { scrollLeft, scrollWidth, clientWidth } = ref.current;
-        if (scrollLeft + clientWidth >= scrollWidth - 5 && !loading) {
-          setLimit((prevLimit) => prevLimit + 5);
-        }
+        if (scrollLeft + clientWidth >= scrollWidth - 5 && !loading) setLimit((prevLimit) => prevLimit + 5);
       } else {
         const { scrollTop, scrollHeight, clientHeight } = ref.current;
-        if (scrollTop + clientHeight >= scrollHeight - 5 && !loading) {
-          setLimit((prevLimit) => prevLimit + 5);
-        }
+        if (scrollTop + clientHeight >= scrollHeight - 5 && !loading) setLimit((prevLimit) => prevLimit + 5);
       }
     }
   };

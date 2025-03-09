@@ -5,6 +5,7 @@ import poscss from "./styles/image.module.css";
 export const AdBanner = ({ style, alt, src, onClick }) => {
   const compid = alt ? toPathname(alt) : "";
   const imgcss = { overflow: "hidden", borderRadius: "var(--pixel-5)", objectFit: "cover", width: "100%", height: "auto", flexShrink: "0" };
+
   return <img id={compid} style={{ ...imgcss, ...style }} alt={alt} loading="lazy" src={src} onClick={onClick} />;
 };
 
@@ -12,6 +13,7 @@ export const PostImage = ({ alt = "", src }) => {
   const compid = alt ? toPathname(alt) : "";
   const prncss = { position: "relative", display: "inline-flex", width: "100%", borderRadius: "var(--pixel-20)", overflow: "hidden" };
   const crdcss = { position: "relative", width: "100%", height: "auto", objectFit: "cover", objectPosition: "center", borderRadius: "var(--pixel-20)", overflow: "hidden", zIndex: "0" };
+
   const [imageSrc, setImageSrc] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -36,6 +38,7 @@ export const PostImage = ({ alt = "", src }) => {
 
 const Img = ({ className, style, alt = "", src = "/img/fallback.jpg", onClick }) => {
   const compid = alt ? toPathname(alt) : "";
+
   return <img id={compid} className={className} style={style} alt={alt} loading="lazy" src={src} onClick={onClick} />;
 };
 

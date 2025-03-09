@@ -6,27 +6,22 @@ const Grid = ({ id, gridTemplateRows = "unset", gridTemplateColumns = "unset", f
 
   return (
     <section id={sectionid} style={sectionstyles}>
-      {/* {React.Children.map(children, (child) => {
+      {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
-            return (
-              <Fragment>
-                {React.Children.map(child.props.children, (fragmentChild) => {
-                  if (React.isValidElement(fragmentChild)) {
-                    const combinedId = fragmentChild.props.id ? `${sectionid}-${fragmentChild.props.id}` : sectionid;
-                    return React.cloneElement(fragmentChild, { id: combinedId });
-                  }
-                  return fragmentChild;
-                })}
-              </Fragment>
-            );
+            return React.Children.map(child.props.children, (fragmentChild) => {
+              if (React.isValidElement(fragmentChild)) {
+                const combinedId = fragmentChild.props.id ? `${sectionid}-${fragmentChild.props.id}` : sectionid;
+                return React.cloneElement(fragmentChild, { id: combinedId });
+              } else return fragmentChild;
+            });
+          } else {
+            const combinedId = child.props.id ? `${sectionid}-${child.props.id}` : sectionid;
+            return React.cloneElement(child, { id: combinedId });
           }
-          const combinedId = child.props.id ? `${sectionid}-${child.props.id}` : sectionid;
-          return React.cloneElement(child, { id: combinedId });
-        }
-        return child;
-      })} */}
-      {React.Children.map(children, (child) => {
+        } else return child;
+      })}
+      {/* {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
             return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: sectionid }) : fragmentChild))}</Fragment>;
@@ -34,7 +29,7 @@ const Grid = ({ id, gridTemplateRows = "unset", gridTemplateColumns = "unset", f
           return React.cloneElement(child, { id: sectionid });
         }
         return child;
-      })}
+      })} */}
     </section>
   );
 };

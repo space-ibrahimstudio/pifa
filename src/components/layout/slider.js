@@ -6,26 +6,25 @@ import styles from "./styles/slider.module.css";
 const Slider = ({ id, title, scope, content, renderContent, swipeThreshold = 50, slideInterval = 3000, contentStyle }) => {
   const ref = useRef(null);
   const contentRef = useRef([]);
+
+  const compid = (title && scope && `${id}-slider-news-${toPathname(title)}-${toPathname(scope)}`) || `${id}-slider-news`;
+  const totalContent = content.length;
+  const mockedContent = [...content, ...content, ...content];
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [contentWidth, setContentWidth] = useState(0);
   const [contentGap, setContentGap] = useState(0);
   const [visible, setVisible] = useState(false);
   const [hover, setHover] = useState(false);
   const [startX, setStartX] = useState(null);
-  const compid = (title && scope && `${id}-slider-news-${toPathname(title)}-${toPathname(scope)}`) || `${id}-slider-news`;
-  const totalContent = content.length;
-  const mockedContent = [...content, ...content, ...content];
 
   const handleVisible = () => {
     const rect = ref.current?.getBoundingClientRect();
-    if (rect) {
-      setVisible(rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight));
-    }
+    if (rect) setVisible(rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight));
   };
 
   const handlePrev = () => setCurrentIndex((prevIndex) => (prevIndex - 1 + totalContent) % totalContent);
   const handleNext = () => setCurrentIndex((prevIndex) => (prevIndex + 1) % totalContent);
-
   const handleTouchStart = (event) => setStartX(event.touches[0].clientX);
   const handleTouchEnd = () => setStartX(null);
   const handleTouchMove = (event) => {
@@ -33,11 +32,8 @@ const Slider = ({ id, title, scope, content, renderContent, swipeThreshold = 50,
     const currentX = event.touches[0].clientX;
     const deltaX = currentX - startX;
     if (Math.abs(deltaX) > swipeThreshold) {
-      if (deltaX > 0) {
-        setCurrentIndex((prevIndex) => (prevIndex - 1 + totalContent) % totalContent);
-      } else {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % totalContent);
-      }
+      if (deltaX > 0) setCurrentIndex((prevIndex) => (prevIndex - 1 + totalContent) % totalContent);
+      else setCurrentIndex((prevIndex) => (prevIndex + 1) % totalContent);
       setStartX(null);
     }
   };
@@ -55,9 +51,7 @@ const Slider = ({ id, title, scope, content, renderContent, swipeThreshold = 50,
     };
     updateDimensions();
     const intervalId = setInterval(() => {
-      if (visible && !hover) {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % (totalContent + 1));
-      }
+      if (visible && !hover) setCurrentIndex((prevIndex) => (prevIndex + 1) % (totalContent + 1));
     }, slideInterval);
     window.addEventListener("resize", updateDimensions);
     window.addEventListener("scroll", handleVisible);

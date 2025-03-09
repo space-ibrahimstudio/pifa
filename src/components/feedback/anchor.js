@@ -5,11 +5,8 @@ const A = ({ type = "int", slug = "/", link = "https://pifa.co.id" }) => {
   const compid = `open-${type === "int" ? `https://pifa.co.id${slug}` : link}`;
   const compcss = { position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 100, backgroundColor: "transparent" };
 
-  if (isCrawl) {
-    return null;
-  }
-
-  return <a id={compid} href={type === "int" ? slug : link} style={compcss} />;
+  if (isCrawl) return null;
+  else return <a id={compid} href={type === "int" ? slug : link} style={compcss} />;
 };
 
 export default A;

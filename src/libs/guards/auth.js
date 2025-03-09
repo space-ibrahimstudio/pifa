@@ -22,9 +22,8 @@ export const AuthProvider = ({ children }) => {
       const url = `${apiURL}/main/signup`;
       const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
       const signupresponse = response.data;
-      if (!signupresponse.error) {
-        log("successfully signed up:", signupresponse);
-      } else if (!signupresponse.status) {
+      if (!signupresponse.error) log("successfully signed up:", signupresponse);
+      else if (!signupresponse.status) {
         log("invalid username or password!");
         return;
       } else {
@@ -115,10 +114,7 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, [location]);
 
-  if (isLoggedin === null || loading) {
-    return <LoadingScreen />;
-  }
-
+  if (isLoggedin === null || loading) return <LoadingScreen />;
   return <AuthContext.Provider value={{ loading, isLoggedin, signup, login, logout, userData }}>{children}</AuthContext.Provider>;
 };
 

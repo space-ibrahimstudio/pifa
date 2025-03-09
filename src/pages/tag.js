@@ -22,6 +22,9 @@ const TagPage = () => {
   const { width } = useWindow();
   const { apiRead, apiGet } = useApi();
   const { H1, Span } = useGraph();
+
+  const id = (slug && `${short}-${slug}`) || `${short}-tag`;
+
   const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(12);
   const [pageInfo, setPageInfo] = useState({ title: "", desc: "", path: "", thumbnail: "" });
@@ -29,14 +32,12 @@ const TagPage = () => {
   const [ads, setAds] = useState([]);
   const [trendTagData, setTrendTagData] = useState([]);
 
-  const id = (slug && `${short}-${slug}`) || `${short}-tag`;
-
   const fetchTrendTagData = async () => {
     try {
       const response = await apiGet("main", "viewtag");
       setTrendTagData(response && response.data && response.data.length > 0 ? response.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching trending tag data:", error);
     }
   };
 
@@ -57,20 +58,19 @@ const TagPage = () => {
         setPageInfo({ title: "", desc: "", path: "", thumbnail: "" });
       }
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching tag post:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const renderAds = (item) => <AdBanner alt={item.idbanner} src={`${imgdomain}/images/banner/${item.bannerimg}`} />;
-
   const fetchBannerData = async () => {
     try {
       const response = await apiGet("main", "bannerview");
       setAds(response && response.data && response.data.length > 0 ? response.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching banner data:", error);
     }
   };
 

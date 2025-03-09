@@ -5,14 +5,14 @@ import styles from "./styles/popover.module.css";
 const modalRoot = document.getElementById("modal-root") || document.body;
 
 const PopOver = ({ onSubmit, onClose, children }) => {
-  const compid = `popover-form`;
   const ref = useRef(null);
+
+  const compid = `popover-form`;
+
   const [isClosing, setIsClosing] = useState(false);
 
   const handleClickOutside = (e) => {
-    if (ref.current && !ref.current.contains(e.target)) {
-      setIsClosing(true);
-    }
+    if (ref.current && !ref.current.contains(e.target)) setIsClosing(true);
   };
 
   useEffect(() => {
@@ -26,50 +26,39 @@ const PopOver = ({ onSubmit, onClose, children }) => {
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
     let modalCount = 0;
     const popupModals = document.querySelectorAll(`.${styles.formScreen}`);
     popupModals.forEach((modal) => {
-      if (!modal.classList.contains(`.${styles.close}`)) {
-        modalCount++;
-      }
+      if (!modal.classList.contains(`.${styles.close}`)) modalCount++;
     });
     document.documentElement.style.overflow = modalCount > 0 ? "hidden" : "auto";
-    return () => {
-      document.documentElement.style.overflow = "auto";
-    };
+    return () => (document.documentElement.style.overflow = "auto");
   }, [isClosing]);
 
   const modalElement = (
     <main id={compid} className={styles.formScroll}>
       <section id={`${compid}-wrap`} className={`${styles.formScreen} ${isClosing ? styles.close : ""}`}>
         <form id={`${compid}-wrap-form`} ref={ref} className={`${styles.form} ${isClosing ? styles.close : ""}`} style={{ maxWidth: "var(--pixel-550)" }} onSubmit={onSubmit}>
-          {/* {React.Children.map(children, (child) => {
+          {React.Children.map(children, (child) => {
             if (React.isValidElement(child)) {
               if (child.type === Fragment) {
-                return (
-                  <Fragment>
-                    {React.Children.map(child.props.children, (fragmentChild) => {
-                      if (React.isValidElement(fragmentChild)) {
-                        const combinedId = fragmentChild.props.id ? `${compid}-wrap-form-${fragmentChild.props.id}` : `${compid}-wrap-form`;
-                        return React.cloneElement(fragmentChild, { id: combinedId });
-                      }
-                      return fragmentChild;
-                    })}
-                  </Fragment>
-                );
+                return React.Children.map(child.props.children, (fragmentChild) => {
+                  if (React.isValidElement(fragmentChild)) {
+                    const combinedId = fragmentChild.props.id ? `${compid}-wrap-form-${fragmentChild.props.id}` : `${compid}-wrap-form`;
+                    return React.cloneElement(fragmentChild, { id: combinedId });
+                  } else return fragmentChild;
+                });
+              } else {
+                const combinedId = child.props.id ? `${compid}-wrap-form-${child.props.id}` : `${compid}-wrap-form`;
+                return React.cloneElement(child, { id: combinedId });
               }
-              const combinedId = child.props.id ? `${compid}-wrap-form-${child.props.id}` : `${compid}-wrap-form`;
-              return React.cloneElement(child, { id: combinedId });
-            }
-            return child;
-          })} */}
-          {React.Children.map(children, (child) => {
+            } else return child;
+          })}
+          {/* {React.Children.map(children, (child) => {
             if (React.isValidElement(child)) {
               if (child.type === Fragment) {
                 return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
@@ -77,7 +66,7 @@ const PopOver = ({ onSubmit, onClose, children }) => {
               return React.cloneElement(child, { id: compid });
             }
             return child;
-          })}
+          })} */}
         </form>
       </section>
     </main>

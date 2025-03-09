@@ -18,7 +18,9 @@ const Navbar = ({ id, parentType = "public" }) => {
   const { isLoggedin, logout, userData } = useAuth();
   const { width } = useWindow();
   const { Close } = useIcons();
+
   const compid = `${id}-top-navigation`;
+
   const [scrolled, setScrolled] = useState(false);
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -26,11 +28,8 @@ const Navbar = ({ id, parentType = "public" }) => {
   const [privateMenus, setPrivateMenus] = useState([]);
 
   const handleLogout = () => logout();
-
   const handleSearch = (e) => {
-    if (e.key === "Enter") {
-      navigate(`/pencarian/${query}`);
-    }
+    if (e.key === "Enter") navigate(`/pencarian/${query}`);
   };
 
   const getPublicMenus = async () => {
@@ -55,25 +54,18 @@ const Navbar = ({ id, parentType = "public" }) => {
   };
 
   useEffect(() => {
-    if (parentType === "private") {
-      getPrivateMenus();
-    } else {
-      getPublicMenus();
-    }
+    if (parentType === "private") getPrivateMenus();
+    else getPublicMenus();
   }, [parentType]);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 120) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      if (window.scrollY > 120) setScrolled(true);
+      else setScrolled(false);
     };
+
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (

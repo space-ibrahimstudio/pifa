@@ -19,9 +19,7 @@ const sendtoGA = ({ name, delta, id }) => {
       value: Math.round(name === "CLS" ? delta * 1000 : delta),
       non_interaction: true,
     });
-  } else {
-    console.warn("gtag function is not available");
-  }
+  } else console.warn("gtag function is not available");
 };
 
 const sendtoLog = ({ name, delta, id }) => {

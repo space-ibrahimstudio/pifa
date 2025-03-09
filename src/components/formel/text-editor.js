@@ -8,37 +8,33 @@ const apiURL = process.env.REACT_APP_API_URL;
 
 const ToolButton = ({ id, isActive, children, onClick }) => {
   const compid = `${id}-editor-tool-button`;
+
   return (
     <button id={compid} className={`${styles.toolButton} ${isActive ? styles.active : ""}`} onClick={onClick}>
-      {/* {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          if (child.type === Fragment) {
-            return (
-              <Fragment>
-                {React.Children.map(child.props.children, (fragmentChild) => {
-                  if (React.isValidElement(fragmentChild)) {
-                    const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
-                    return React.cloneElement(fragmentChild, { id: combinedId });
-                  }
-                  return fragmentChild;
-                })}
-              </Fragment>
-            );
-          }
-          const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
-          return React.cloneElement(child, { id: combinedId });
-        }
-        return child;
-      })} */}
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+            return React.Children.map(child.props.children, (frag_child) => {
+              if (React.isValidElement(frag_child)) {
+                const combinedid = frag_child.props.id ? `${compid}-${frag_child.props.id}` : compid;
+                return React.cloneElement(frag_child, { id: combinedid });
+              } else return frag_child;
+            });
+          } else {
+            const combinedid = child.props.id ? `${compid}-${child.props.id}` : compid;
+            return React.cloneElement(child, { id: combinedid });
+          }
+        } else return child;
+      })}
+      {/* {React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          if (child.type === Fragment) {
+            return <Fragment>{React.Children.map(child.props.children, (frag_child) => (React.isValidElement(frag_child) ? React.cloneElement(frag_child, { id: compid }) : frag_child))}</Fragment>;
           }
           return React.cloneElement(child, { id: compid });
         }
         return child;
-      })}
+      })} */}
     </button>
   );
 };
@@ -46,37 +42,33 @@ const ToolButton = ({ id, isActive, children, onClick }) => {
 const ToolGroup = ({ id, children }) => {
   const compid = `${id}-editor-tool-group`;
   const groupstyles = { display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", padding: "var(--pixel-10)", gap: "var(--pixel-5)" };
+
   return (
     <section id={compid} style={groupstyles}>
-      {/* {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          if (child.type === Fragment) {
-            return (
-              <Fragment>
-                {React.Children.map(child.props.children, (fragmentChild) => {
-                  if (React.isValidElement(fragmentChild)) {
-                    const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
-                    return React.cloneElement(fragmentChild, { id: combinedId });
-                  }
-                  return fragmentChild;
-                })}
-              </Fragment>
-            );
-          }
-          const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
-          return React.cloneElement(child, { id: combinedId });
-        }
-        return child;
-      })} */}
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+            return React.Children.map(child.props.children, (frag_child) => {
+              if (React.isValidElement(frag_child)) {
+                const combinedid = frag_child.props.id ? `${compid}-${frag_child.props.id}` : compid;
+                return React.cloneElement(frag_child, { id: combinedid });
+              } else return frag_child;
+            });
+          } else {
+            const combinedid = child.props.id ? `${compid}-${child.props.id}` : compid;
+            return React.cloneElement(child, { id: combinedid });
+          }
+        } else return child;
+      })}
+      {/* {React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          if (child.type === Fragment) {
+            return <Fragment>{React.Children.map(child.props.children, (frag_child) => (React.isValidElement(frag_child) ? React.cloneElement(frag_child, { id: compid }) : frag_child))}</Fragment>;
           }
           return React.cloneElement(child, { id: compid });
         }
         return child;
-      })}
+      })} */}
     </section>
   );
 };
@@ -235,6 +227,7 @@ const Tool = ({ id, name, size = "var(--pixel-25)", color }) => {
         return null;
     }
   };
+
   return (
     <div id={compid} className={styles.isIcon} style={iconstyle}>
       {renderIcon()}
@@ -245,43 +238,40 @@ const Tool = ({ id, name, size = "var(--pixel-25)", color }) => {
 export const EditorFooter = ({ id, children }) => {
   const compid = `${id}-editor-footer`;
   const footerstyles = { alignSelf: "stretch", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-end", gap: "var(--pixel-10)" };
+
   return (
     <footer id={compid} style={footerstyles}>
-      {/* {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          if (child.type === Fragment) {
-            return (
-              <Fragment>
-                {React.Children.map(child.props.children, (fragmentChild) => {
-                  if (React.isValidElement(fragmentChild)) {
-                    const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
-                    return React.cloneElement(fragmentChild, { id: combinedId });
-                  }
-                  return fragmentChild;
-                })}
-              </Fragment>
-            );
-          }
-          const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
-          return React.cloneElement(child, { id: combinedId });
-        }
-        return child;
-      })} */}
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
+            return React.Children.map(child.props.children, (frag_child) => {
+              if (React.isValidElement(frag_child)) {
+                const combinedid = frag_child.props.id ? `${compid}-${frag_child.props.id}` : compid;
+                return React.cloneElement(frag_child, { id: combinedid });
+              } else return frag_child;
+            });
+          } else {
+            const combinedid = child.props.id ? `${compid}-${child.props.id}` : compid;
+            return React.cloneElement(child, { id: combinedid });
+          }
+        } else return child;
+      })}
+      {/* {React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          if (child.type === Fragment) {
+            return <Fragment>{React.Children.map(child.props.children, (frag_child) => (React.isValidElement(frag_child) ? React.cloneElement(frag_child, { id: compid }) : frag_child))}</Fragment>;
           }
           return React.cloneElement(child, { id: compid });
         }
         return child;
-      })}
+      })} */}
     </footer>
   );
 };
 
 export const EditorContent = ({ id, editorRef, handleInput, handlePaste }) => {
   const compid = `${id}-editor-content`;
+
   return (
     <section id={compid} className={styles.editorContent}>
       <div className={styles.contentArea} ref={editorRef} contentEditable={true} onInput={handleInput} onPaste={handlePaste}></div>
@@ -311,9 +301,7 @@ export const EditorToolbar = ({ id, tools, formatText, toggleHeading, activeForm
     e.preventDefault();
     e.stopPropagation();
     const action = actionMap[name];
-    if (action) {
-      action();
-    }
+    if (action) action();
   };
 
   return (
@@ -351,11 +339,8 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
     if (selection.rangeCount > 0) {
       const range = selection.getRangeAt(0);
       const selectedElement = range.commonAncestorContainer.nodeType === 3 ? range.commonAncestorContainer.parentElement : range.commonAncestorContainer;
-      if (selectedElement.tagName === heading) {
-        formatText("formatBlock", "P");
-      } else {
-        formatText("formatBlock", heading);
-      }
+      if (selectedElement.tagName === heading) formatText("formatBlock", "P");
+      else formatText("formatBlock", heading);
     }
   };
 
@@ -398,6 +383,7 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
         }
       }
     };
+
     fileInput.click();
   };
 
@@ -439,18 +425,14 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
   const handlePaste = (e) => {
     e.preventDefault();
     const pasteData = e.clipboardData.getData("text/html");
-    if (pasteData) {
-      document.execCommand("insertHTML", false, pasteData);
-    } else {
+    if (pasteData) document.execCommand("insertHTML", false, pasteData);
+    else {
       const text = e.clipboardData.getData("text/plain");
       document.execCommand("insertText", false, text);
     }
   };
 
-  const handleSelectionChange = () => {
-    updateActiveFormats();
-  };
-
+  const handleSelectionChange = () => updateActiveFormats();
   const handleSubmit = (e) => {
     e.preventDefault();
     const content = editorRef.current.innerHTML;
@@ -459,49 +441,40 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
   };
 
   useEffect(() => {
-    if (editorRef.current) {
-      editorRef.current.innerHTML = initialContent;
-    }
+    if (editorRef.current) editorRef.current.innerHTML = initialContent;
   }, [initialContent]);
 
   useEffect(() => {
     document.addEventListener("selectionchange", handleSelectionChange);
-    return () => {
-      document.removeEventListener("selectionchange", handleSelectionChange);
-    };
+    return () => document.removeEventListener("selectionchange", handleSelectionChange);
   }, []);
 
   return (
     <form id={compid} onSubmit={handleSubmit} style={editorstyles}>
-      {/* {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          if (child.type === Fragment) {
-            return (
-              <Fragment>
-                {React.Children.map(child.props.children, (fragmentChild) => {
-                  if (React.isValidElement(fragmentChild)) {
-                    const combinedId = fragmentChild.props.id ? `${compid}-${fragmentChild.props.id}` : compid;
-                    return React.cloneElement(fragmentChild, { id: combinedId, editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste });
-                  }
-                  return fragmentChild;
-                })}
-              </Fragment>
-            );
-          }
-          const combinedId = child.props.id ? `${compid}-${child.props.id}` : compid;
-          return React.cloneElement(child, { id: combinedId, editorRef, formatText, toggleHeading, activeFormats, handleInput, handlePaste });
-        }
-        return child;
-      })} */}
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid, editorRef, formatText, toggleHeading, activeFormats, insertImage, insertVideo, insertLink, handleInput, handlePaste }) : fragmentChild))}</Fragment>;
+            return React.Children.map(child.props.children, (frag_child) => {
+              if (React.isValidElement(frag_child)) {
+                const combinedid = frag_child.props.id ? `${compid}-${frag_child.props.id}` : compid;
+                return React.cloneElement(frag_child, { id: combinedid, editorRef, formatText, toggleHeading, activeFormats, insertImage, insertVideo, insertLink, handleInput, handlePaste });
+              } else return frag_child;
+            });
+          } else {
+            const combinedid = child.props.id ? `${compid}-${child.props.id}` : compid;
+            return React.cloneElement(child, { id: combinedid, editorRef, formatText, toggleHeading, activeFormats, insertImage, insertVideo, insertLink, handleInput, handlePaste });
+          }
+        } else return child;
+      })}
+      {/* {React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          if (child.type === Fragment) {
+            return <Fragment>{React.Children.map(child.props.children, (frag_child) => (React.isValidElement(frag_child) ? React.cloneElement(frag_child, { id: compid, editorRef, formatText, toggleHeading, activeFormats, insertImage, insertVideo, insertLink, handleInput, handlePaste }) : frag_child))}</Fragment>;
           }
           return React.cloneElement(child, { id: compid, editorRef, formatText, toggleHeading, activeFormats, insertImage, insertVideo, insertLink, handleInput, handlePaste });
         }
         return child;
-      })}
+      })} */}
     </form>
   );
 };

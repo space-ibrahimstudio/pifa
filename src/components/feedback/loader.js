@@ -9,7 +9,12 @@ export const BlurUpImg = ({ className, style, alt, src }) => {
   const [loaded, setLoaded] = useState(false);
   const [blurredSrc, setBlurredSrc] = useState("");
   const [actualSrc, setActualSrc] = useState("");
-  const compstyle = { position: "relative", objectFit: "cover", objectPosition: "center", overflow: "hidden" };
+  const compstyle = {
+    position: "relative",
+    objectFit: "cover",
+    objectPosition: "center",
+    overflow: "hidden",
+  };
 
   const handleImageLoad = () => setLoaded(true);
   const generateBlurredImage = async (url) => {
@@ -89,10 +94,7 @@ export const LoadingContent = () => {
 
 export const LoadingProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
-
-  const setLoading = (status) => {
-    setIsLoading(status);
-  };
+  const setLoading = (status) => setIsLoading(status);
 
   return (
     <LoadingContext.Provider value={{ isLoading, setLoading }}>

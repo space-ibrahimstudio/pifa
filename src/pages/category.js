@@ -25,6 +25,9 @@ const CategoryPage = () => {
   const { apiGet, apiRead } = useApi();
   const { setLoading } = useLoading();
   const { H1, Span } = useGraph();
+
+  const id = (category && `${short}-${category}`) || `${short}-category`;
+
   const [pageInfo, setPageInfo] = useState({ id: "", title: "", desc: "", path: "", thumbnail: "" });
   const [latestPostData, setLatestPostData] = useState([]);
   const [trendingPostData, setTrendingPostData] = useState([]);
@@ -37,17 +40,14 @@ const CategoryPage = () => {
   const [ads, setAds] = useState([]);
   const [trendTagData, setTrendTagData] = useState([]);
 
-  const id = (category && `${short}-${category}`) || `${short}-category`;
-
   const fetchCatNewsData = async () => {
     try {
       const response = await apiGet("main", "categorynew");
       if (response && response.data && response.data.length > 0) {
         const catnewsdata = response.data;
         const selectedcat = catnewsdata.filter((item) => item.slug === category);
-        if (selectedcat && selectedcat.length > 0) {
-          setPageInfo({ id: selectedcat[0].id, title: selectedcat[0].nama_kategori_berita, desc: selectedcat[0].desc, path: `/berita/kategori/${selectedcat[0].slug}`, thumbnail: `${imgdomain}/images/img_berita/${selectedcat[0].img_berita}` });
-        } else {
+        if (selectedcat && selectedcat.length > 0) setPageInfo({ id: selectedcat[0].id, title: selectedcat[0].nama_kategori_berita, desc: selectedcat[0].desc, path: `/berita/kategori/${selectedcat[0].slug}`, thumbnail: `${imgdomain}/images/img_berita/${selectedcat[0].img_berita}` });
+        else {
           setPageInfo({ id: "", title: "404 NOT FOUND", desc: "", path: "", thumbnail: "" });
           navigate("404-not-found");
         }
@@ -56,7 +56,7 @@ const CategoryPage = () => {
         navigate("404-not-found");
       }
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching category data:", error);
     }
   };
 
@@ -65,7 +65,7 @@ const CategoryPage = () => {
       const response = await apiGet("main", "viewtag");
       setTrendTagData(response && response.data && response.data.length > 0 ? response.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching trending tag data:", error);
     }
   };
 
@@ -80,7 +80,7 @@ const CategoryPage = () => {
       const postsdata = await apiRead(formData, "main", "cattrendingnew");
       setTrendingPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching trending posts:", error);
     } finally {
       setTrendLoading(false);
     }
@@ -96,7 +96,7 @@ const CategoryPage = () => {
       const postsdata = await apiRead(formData, "main", "categorynew");
       setLatestPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching latest posts:", error);
     } finally {
       setLoading(false);
     }
@@ -129,20 +129,19 @@ const CategoryPage = () => {
           break;
       }
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching feed posts:", error);
     } finally {
       setFeedsLoading(false);
     }
   };
 
   const renderAds = (item) => <AdBanner alt={item.idbanner} src={`${imgdomain}/images/banner/${item.bannerimg}`} />;
-
   const fetchBannerData = async () => {
     try {
       const response = await apiGet("main", "bannerview");
       setAds(response && response.data && response.data.length > 0 ? response.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching banner data:", error);
     }
   };
 
@@ -161,21 +160,15 @@ const CategoryPage = () => {
   }, [category]);
 
   useEffect(() => {
-    if (pageInfo.id) {
-      fetchTrendingPosts(pageInfo.id, trendLimit);
-    }
+    if (pageInfo.id) fetchTrendingPosts(pageInfo.id, trendLimit);
   }, [pageInfo.id, trendLimit]);
 
   useEffect(() => {
-    if (pageInfo.id) {
-      fetchLatestPosts(pageInfo.id);
-    }
+    if (pageInfo.id) fetchLatestPosts(pageInfo.id);
   }, [pageInfo.id]);
 
   useEffect(() => {
-    if (pageInfo.id) {
-      fetchFeedPosts(pageInfo.id, feedLimit);
-    }
+    if (pageInfo.id) fetchFeedPosts(pageInfo.id, feedLimit);
   }, [pageInfo.id, feedLimit, postsFilter]);
 
   return (

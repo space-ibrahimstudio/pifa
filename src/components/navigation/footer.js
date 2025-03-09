@@ -15,6 +15,7 @@ const FooterMenu = ({ title, children }) => {
 
 const FooterMenuLi = ({ children, to }) => {
   const navigate = useNavigate();
+
   return (
     <b className={styles.menuLi} onClick={() => navigate(to)}>
       {children}
@@ -24,43 +25,41 @@ const FooterMenuLi = ({ children, to }) => {
 
 const Footer = ({ id }) => {
   const compid = `${id}-bottom-navigation`;
+
   const [contacts, setContacts] = useState([]);
   const [staticPage, setStaticPage] = useState([]);
   const [socials, setSocials] = useState([]);
 
+  const fetchContacts = async () => {
+    try {
+      const info = await getContactInfo();
+      setContacts(info);
+    } catch (error) {
+      console.error("error getting contact info:", error);
+    }
+  };
+
+  const fetchPages = async () => {
+    try {
+      const pages = await getStaticPages();
+      setStaticPage(pages);
+    } catch (error) {
+      console.error("error getting static pages:", error);
+    }
+  };
+
+  const fetchSocials = async () => {
+    try {
+      const info = await getSocialInfo();
+      setSocials(info);
+    } catch (error) {
+      console.error("error getting social info:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchContacts = async () => {
-      try {
-        const info = await getContactInfo();
-        setContacts(info);
-      } catch (error) {
-        console.error("error getting contact info:", error);
-      }
-    };
     fetchContacts();
-  }, []);
-
-  useEffect(() => {
-    const fetchPages = async () => {
-      try {
-        const pages = await getStaticPages();
-        setStaticPage(pages);
-      } catch (error) {
-        console.error("error getting static pages:", error);
-      }
-    };
     fetchPages();
-  }, []);
-
-  useEffect(() => {
-    const fetchSocials = async () => {
-      try {
-        const info = await getSocialInfo();
-        setSocials(info);
-      } catch (error) {
-        console.error("error getting social info:", error);
-      }
-    };
     fetchSocials();
   }, []);
 

@@ -22,13 +22,14 @@ const SearchPage = () => {
   const { short } = useDocument();
   const { apiRead, apiGet } = useApi();
   const { H1, Span } = useGraph();
+
+  const id = `${short}-${toPathname(query)}`;
+
   const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(12);
   const [searchedData, setSearchedData] = useState([]);
   const [ads, setAds] = useState([]);
   const [trendTagData, setTrendTagData] = useState([]);
-
-  const id = `${short}-${toPathname(query)}`;
 
   const fetchTagPosts = async (newLimit) => {
     if (loading) return;
@@ -38,13 +39,9 @@ const SearchPage = () => {
     formData.append("limit", newLimit);
     try {
       const searchdata = await apiRead(formData, "main", "searchnew");
-      if (searchdata && searchdata.data && searchdata.data.length > 0) {
-        setSearchedData(searchdata.data);
-      } else {
-        setSearchedData([]);
-      }
+      setSearchedData(searchdata && searchdata.data && searchdata.data.length > 0 ? searchdata.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching tag post:", error);
     } finally {
       setLoading(false);
     }
@@ -55,18 +52,17 @@ const SearchPage = () => {
       const response = await apiGet("main", "viewtag");
       setTrendTagData(response && response.data && response.data.length > 0 ? response.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching trending tag data:", error);
     }
   };
 
   const renderAds = (item) => <AdBanner alt={item.idbanner} src={`${imgdomain}/images/banner/${item.bannerimg}`} />;
-
   const fetchBannerData = async () => {
     try {
       const response = await apiGet("main", "bannerview");
       setAds(response && response.data && response.data.length > 0 ? response.data : []);
     } catch (error) {
-      console.error("error:", error);
+      console.error("error fetching banner data:", error);
     }
   };
 
