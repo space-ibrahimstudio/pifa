@@ -5,10 +5,11 @@ import styles from "./styles/loader.module.css";
 const LoadingContext = createContext();
 
 export const BlurUpImg = ({ className, style, alt, src }) => {
-  const compid = (alt && toPathname(alt)) || "";
   const [loaded, setLoaded] = useState(false);
   const [blurredSrc, setBlurredSrc] = useState("");
   const [actualSrc, setActualSrc] = useState("");
+
+  const compid = (alt && toPathname(alt)) || "";
   const compstyle = {
     position: "relative",
     objectFit: "cover",
@@ -94,6 +95,7 @@ export const LoadingContent = () => {
 
 export const LoadingProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
+
   const setLoading = (status) => setIsLoading(status);
 
   return (

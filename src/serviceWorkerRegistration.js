@@ -16,10 +16,6 @@ export function register(config) {
   }
 }
 
-function showUpdateNotification() {
-  if (window.confirm("New version available. Do you want to refresh?")) window.location.reload();
-}
-
 function registerValidSW(swUrl, config) {
   navigator.serviceWorker
     .register(swUrl)
@@ -30,7 +26,6 @@ function registerValidSW(swUrl, config) {
           installingWorker.onstatechange = () => {
             if (installingWorker.state === "installed") {
               if (navigator.serviceWorker.controller) {
-                showUpdateNotification();
                 if (config && config.onUpdate) config.onUpdate(registration);
               } else {
                 console.log("Content is cached for offline use.");

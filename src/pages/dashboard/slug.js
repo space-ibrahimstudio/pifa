@@ -1,9 +1,10 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
-import axios from "axios";
 import { useParams, Navigate, useNavigate } from "react-router-dom";
 import { useDevmode, useWindow } from "@ibrahimstudio/react";
+import { Select } from "@ibrahimstudio/select";
 import { Input } from "@ibrahimstudio/input";
 import { Button } from "@ibrahimstudio/button";
+import { Textarea } from "@ibrahimstudio/textarea";
 import useApi from "../../libs/plugins/apis";
 import useAuth from "../../libs/guards/auth";
 import useGraph from "../../components/content/graph";
@@ -32,16 +33,15 @@ const DashboardSlugPage = () => {
   const { short } = useDocument();
   const { limitopt } = useOptions();
   const { inputSch, errorSch } = useInputSchema();
-  const { H1, P } = useGraph();
+  const { H1 } = useGraph();
   const { VGrid, VList, VPlus } = useIcons();
-  const id = `${short}-${scope}-${slug}`;
+
   const [limit, setLimit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isDataShown, setIsDataShown] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isGenerating, setIsGenerating] = useState(false);
   const [selectedID, setSelectedID] = useState("");
   const [selectedMode, setSelectedMode] = useState("view");
   const [selectedView, setSelectedView] = useState("grid");
@@ -50,10 +50,8 @@ const DashboardSlugPage = () => {
   const [selectedCatType, setSelectedCatType] = useState("berita");
   const [pageTitle, setPageTitle] = useState("");
   const [draggingIndex, setDraggingIndex] = useState(null);
-
   const [inputData, setInputData] = useState({ ...inputSch });
   const [errors, setErrors] = useState({ ...errorSch });
-
   const [postData, setPostData] = useState([]);
   const [newsCatData, setNewsCatData] = useState([]);
   const [localCatData, setLocalCatData] = useState([]);
@@ -67,6 +65,7 @@ const DashboardSlugPage = () => {
   const [moduleData, setModuleData] = useState([]);
   const [bannerData, setBannerData] = useState([]);
 
+  const id = `${short}-${scope}-${slug}`;
   const daysOfWeek = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
@@ -112,9 +111,7 @@ const DashboardSlugPage = () => {
     if (file && file.type.startsWith("image/")) {
       const url = URL.createObjectURL(file);
       setSelectedImageUrl(url);
-    } else {
-      setSelectedImageUrl(null);
-    }
+    } else setSelectedImageUrl(null);
   };
 
   const fetchData = async () => {
@@ -273,9 +270,7 @@ const DashboardSlugPage = () => {
     const successmsg = "Selamat! Data baru berhasil ditambahkan.";
     const errormsg = "Terjadi kesalahan saat menambahkan data. Mohon periksa koneksi internet anda dan coba lagi.";
     const confirm = window.confirm(confirmmsg);
-    if (!confirm) {
-      return;
-    }
+    if (!confirm) return;
     setIsSubmitting(true);
     try {
       let submittedData;
@@ -303,9 +298,7 @@ const DashboardSlugPage = () => {
       }
       const formData = new FormData();
       formData.append("data", JSON.stringify(submittedData));
-      if (slug === "kategori" || slug === "module") {
-        formData.append("fileimg", selectedImage);
-      }
+      if (slug === "kategori" || slug === "module") formData.append("fileimg", selectedImage);
       await apiCrud(formData, sendpoint, endpoint);
       alert(successmsg);
       log("submitted data:", submittedData);
@@ -329,6 +322,7 @@ const DashboardSlugPage = () => {
               ["h1", "h2", "bold", "italic", "underline", "strikethrough", "ol", "ul"],
               ["link", "image", "video"],
             ];
+
             modeSwitcher = [
               { icon: <VList size="var(--pixel-20)" />, label: "Daftar Berita", onClick: () => setSelectedMode("view"), active: selectedMode === "view" },
               { icon: <VPlus size="var(--pixel-20)" />, label: "Tambah Berita", onClick: () => setSelectedMode("add"), active: selectedMode === "add" },
@@ -356,25 +350,17 @@ const DashboardSlugPage = () => {
             const handleTagSearch = (e) => {
               const value = e.target.value;
               setTagQuery(value);
-              if (value) {
-                fetchTagSuggests(value);
-              } else {
-                setTagSuggests([]);
-              }
+              if (value) fetchTagSuggests(value);
+              else setTagSuggests([]);
             };
 
             const handleAddTag = (tag) => {
-              if (!selectedTags.some((existingTag) => existingTag.tag === tag.nama_kategori_tag)) {
-                setSelectedTags([...selectedTags, { tag: tag.nama_kategori_tag }]);
-              }
+              if (!selectedTags.some((existingTag) => existingTag.tag === tag.nama_kategori_tag)) setSelectedTags([...selectedTags, { tag: tag.nama_kategori_tag }]);
               setTagQuery("");
               setTagSuggests([]);
             };
 
-            const handleRemoveTag = (tagToRemove) => {
-              setSelectedTags(selectedTags.filter((tag) => tag.tag !== tagToRemove));
-            };
-
+            const handleRemoveTag = (tagToRemove) => setSelectedTags(selectedTags.filter((tag) => tag.tag !== tagToRemove));
             const handlePublish = async (content) => {
               const requiredFields = ["post_date", "judul", "penulis", "catberita", "catdaerah", "thumbnail"];
               const validationErrors = inputValidator(inputData, requiredFields);
@@ -398,9 +384,7 @@ const DashboardSlugPage = () => {
               const successmsg = "Selamat! Data baru berhasil ditambahkan.";
               const errormsg = "Terjadi kesalahan saat menambahkan data. Mohon periksa koneksi internet anda dan coba lagi.";
               const confirm = window.confirm(confirmmsg);
-              if (!confirm) {
-                return;
-              }
+              if (!confirm) return;
               setIsSubmitting(true);
               try {
                 const base64Content = btoa(unescape(encodeURIComponent(`<div>${content}</div>`)));
@@ -418,33 +402,16 @@ const DashboardSlugPage = () => {
               }
             };
 
-            // const generateBlogPost = async () => {
-            //   setIsGenerating(true);
-            //   try {
-            //     const response = await axios.post("http://localhost:5000/api/generate", { title: inputData.judul }, { headers: { "Content-Type": "application/json" } });
-            //     console.log("Gemini response:", response);
-            //     setInitialContent(response.data.content);
-            //   } catch (error) {
-            //     console.error("Error generating blog post:", error);
-            //     setInitialContent("Failed to generate content.");
-            //   } finally {
-            //     setIsGenerating(false);
-            //   }
-            // };
-
             return (
               <Fragment>
                 <Header isasChild alignItems="center" gap="var(--pixel-15)">
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     Isi Berita
                   </H1>
-                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section overflow="unset" isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Section overflow="unset" isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
-                    {/* {selectedMode === "add" && <Button id="back-button" buttonText="Test AI" onClick={generateBlogPost} />} */}
-                    {/* {selectedMode === "view" && <Input id="limit-data" isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />} */}
-                    <Input id="limit-data" isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
+                    <Select id="limit-data" labeled={false} noemptyval bcolor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onChange={handleLimitChange} readonly={!isDataShown} disabled={selectedMode === "add"} />
                     {selectedMode === "view" && width >= 464 && <SwitchButton type="ico" buttons={viewSwitcher} />}
                   </Section>
                   <SwitchButton type={width >= 464 ? "reg" : "ico"} buttons={modeSwitcher} />
@@ -465,16 +432,16 @@ const DashboardSlugPage = () => {
                 {selectedMode === "add" && (
                   <Section isWrap gap="var(--pixel-10)">
                     <TextEditor minW="var(--pixel-350)" initialContent={initialContent} onSubmit={handlePublish}>
-                      <Input id="post-title" type="text" labelText="Judul Berita" placeholder="Masukkan judul berita" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
-                      <Input id="post-banner" variant="upload" labelText="Thumbnail Berita" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" onSelect={handleImageSelect} maxSize={5 * 1024 * 1024} isRequired />
-                      <Input id="post-alt" type="text" labelText="Thumbnail Alt" placeholder="Masukkan alternatif text" name="thumbnail" value={inputData.thumbnail} onChange={handleInputChange} errorContent={errors.thumbnail} isRequired />
+                      <Input id="post-title" type="text" label="Judul Berita" placeholder="Masukkan judul berita" name="judul" value={inputData.judul} onChange={handleInputChange} errormsg={errors.judul} required />
+                      <Input id="post-banner" type="file" accept="image/*" label="Thumbnail Berita" placeholder="Pilih thumbnail" onChange={handleImageSelect} maxsize={5 * 1024 * 1024} required />
+                      <Input id="post-alt" type="text" label="Thumbnail Alt" placeholder="Masukkan alternatif text" name="thumbnail" value={inputData.thumbnail} onChange={handleInputChange} errormsg={errors.thumbnail} required />
                       <Fieldset>
-                        <Input id="post-catnews" variant="select" isSearchable labelText="Kategori Berita" placeholder="Pilih kategori berita" name="catberita" value={inputData.catberita} options={newsCatData.map((item) => ({ value: item.id, label: item.nama_kategori_berita }))} onSelect={(selectedValue) => handleInputChange({ target: { name: "catberita", value: selectedValue } })} errorContent={errors.catberita} isRequired />
-                        <Input id="post-catlocal" variant="select" isSearchable labelText="Kategori Daerah" placeholder="Pilih kategori daerah" name="catdaerah" value={inputData.catdaerah} options={localCatData.map((item) => ({ value: item.id, label: item.nama_kategori_daerah }))} onSelect={(selectedValue) => handleInputChange({ target: { name: "catdaerah", value: selectedValue } })} errorContent={errors.catdaerah} isRequired />
+                        <Select id="post-catnews" searchable label="Kategori Berita" placeholder="Pilih kategori berita" name="catberita" value={inputData.catberita} options={newsCatData.map((item) => ({ value: item.id, label: item.nama_kategori_berita }))} onChange={(selectedValue) => handleInputChange({ target: { name: "catberita", value: selectedValue } })} errormsg={errors.catberita} required />
+                        <Select id="post-catlocal" searchable label="Kategori Daerah" placeholder="Pilih kategori daerah" name="catdaerah" value={inputData.catdaerah} options={localCatData.map((item) => ({ value: item.id, label: item.nama_kategori_daerah }))} onChange={(selectedValue) => handleInputChange({ target: { name: "catdaerah", value: selectedValue } })} errormsg={errors.catdaerah} required />
                       </Fieldset>
                       <Fieldset>
-                        <Input id="post-date" type="date" labelText="Tanggal Terbit" name="post_date" value={inputData.post_date} onChange={handleInputChange} errorContent={errors.post_date} isRequired />
-                        <Input id="post-writer" type="text" labelText="Penulis Berita" placeholder="Masukkan nama penulis" name="penulis" value={inputData.penulis} onChange={handleInputChange} errorContent={errors.penulis} isRequired />
+                        <Input id="post-date" type="date" label="Tanggal Terbit" name="post_date" value={inputData.post_date} onChange={handleInputChange} errormsg={errors.post_date} required />
+                        <Input id="post-writer" type="text" label="Penulis Berita" placeholder="Masukkan nama penulis" name="penulis" value={inputData.penulis} onChange={handleInputChange} errormsg={errors.penulis} required />
                       </Fieldset>
                       <EditorToolbar tools={tools} />
                       <EditorContent />
@@ -485,7 +452,7 @@ const DashboardSlugPage = () => {
                           ))}
                         </Fieldset>
                       )}
-                      <Input id="post-tag" type="text" labelText="Tag Berita" placeholder="Cari tag berita" name="tag_suggest" value={tagQuery} onChange={handleTagSearch} errorContent={errors.tag_suggest} />
+                      <Input id="post-tag" type="text" label="Tag Berita" placeholder="Cari tag berita" name="tag_suggest" value={tagQuery} onChange={handleTagSearch} errormsg={errors.tag_suggest} />
                       {tagSuggests.length > 0 && (
                         <Fieldset>
                           {tagSuggests.map((item, index) => (
@@ -551,7 +518,6 @@ const DashboardSlugPage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     {selectedCatType === "berita" ? "Kategori Berita" : "Kategori Daerah"}
                   </H1>
-                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <SwitchButton buttons={switchCatType} />
@@ -578,9 +544,9 @@ const DashboardSlugPage = () => {
                 {selectedMode === "add" && (
                   <Section isWrap gap="var(--pixel-10)">
                     <Form minW="var(--pixel-350)" onSubmit={selectedCatType === "berita" ? (e) => handleSubmit(e, "cudcatberita") : (e) => handleSubmit(e, "cudcatdaerah")}>
-                      <Input id="cat-image" variant="upload" labelText="Thumbnail (og:image)" isPreview note="Rekomendasi ukuran: 920 x 470 pixels" onSelect={handleImageSelect} isRequired />
-                      <Input id="cat-title" type="text" labelText="Judul (og:title)" placeholder="Masukkan judul kategori" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
-                      <Input id="cat-desc" type="text" labelText="Deskripsi (og:description)" placeholder="Masukkan deskripsi kategori" name="desc" value={inputData.desc} onChange={handleInputChange} errorContent={errors.desc} isRequired />
+                      <Input id="cat-image" type="file" accept="image/*" label="Thumbnail (og:image)" placeholder="Pilih thumbnail" onChange={handleImageSelect} required />
+                      <Input id="cat-title" type="text" label="Judul (og:title)" placeholder="Masukkan judul kategori" name="judul" value={inputData.judul} onChange={handleInputChange} errormsg={errors.judul} required />
+                      <Input id="cat-desc" type="text" label="Deskripsi (og:description)" placeholder="Masukkan deskripsi kategori" name="desc" value={inputData.desc} onChange={handleInputChange} errormsg={errors.desc} required />
                       <EditorFooter>
                         <Button id="submit-action" type="submit" buttonText="Publish Kategori" action="save" isLoading={isSubmitting} />
                       </EditorFooter>
@@ -624,17 +590,13 @@ const DashboardSlugPage = () => {
               const successmsg = action === "add" ? "Selamat! Data baru berhasil ditambahkan." : "Selamat! Perubahan data berhasil disimpan.";
               const errormsg = action === "add" ? "Terjadi kesalahan saat menambahkan data. Mohon periksa koneksi internet anda dan coba lagi." : "Terjadi kesalahan saat menyimpan perubahan. Mohon periksa koneksi internet anda dan coba lagi.";
               const confirm = window.confirm(confirmmsg);
-              if (!confirm) {
-                return;
-              }
+              if (!confirm) return;
               setIsSubmitting(true);
               try {
                 const submittedData = { secret: userData.token_activation, name: inputData.name };
                 const formData = new FormData();
                 formData.append("data", JSON.stringify(submittedData));
-                if (action === "update") {
-                  formData.append("idedit", selectedID);
-                }
+                if (action === "update") formData.append("idedit", selectedID);
                 await apiCrud(formData, "office", "cudtags");
                 alert(successmsg);
                 log("submitted data:", submittedData);
@@ -654,9 +616,7 @@ const DashboardSlugPage = () => {
               const successmsg = "Selamat! Data terpilih berhasil dihapus.";
               const errormsg = "Terjadi kesalahan saat menghapus data. Mohon periksa koneksi internet anda dan coba lagi.";
               const confirm = window.confirm(confirmmsg);
-              if (!confirm) {
-                return;
-              }
+              if (!confirm) return;
               setIsSubmitting(true);
               try {
                 const submittedData = { secret: userData.token_activation, name: "" };
@@ -682,11 +642,10 @@ const DashboardSlugPage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     Tag Berita
                   </H1>
-                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section overflow="unset" isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Section overflow="unset" isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
-                    <Input id="limit-data" isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
+                    <Select id="limit-data" labeled={false} noemptyval bcolor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onChange={handleLimitChange} readonly={!isDataShown} disabled={selectedMode === "add"} />
                   </Section>
                   <SwitchButton buttons={modeSwitcher} />
                 </Section>
@@ -730,9 +689,7 @@ const DashboardSlugPage = () => {
               const successmsg = "Selamat! Banner terpilih berhasil dihapus.";
               const errormsg = "Terjadi kesalahan saat menghapus banner. Mohon periksa koneksi internet anda dan coba lagi.";
               const confirm = window.confirm(confirmmsg);
-              if (!confirm) {
-                return;
-              }
+              if (!confirm) return;
               setIsSubmitting(true);
               try {
                 const submittedData = { secret: userData.token_activation, status: "1" };
@@ -752,10 +709,7 @@ const DashboardSlugPage = () => {
               }
             };
 
-            const handleBDragStart = (index) => {
-              setDraggingIndex(index);
-            };
-
+            const handleBDragStart = (index) => setDraggingIndex(index);
             const handleBDragOver = (e, hoverIndex) => {
               e.preventDefault();
               if (draggingIndex === hoverIndex) return;
@@ -787,7 +741,6 @@ const DashboardSlugPage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     Banner Berita
                   </H1>
-                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section gap="var(--pixel-10)">
                   {bannerData
@@ -821,11 +774,10 @@ const DashboardSlugPage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     Modul Event
                   </H1>
-                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section overflow="unset" isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Section overflow="unset" isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
-                    <Input id="limit-data" isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
+                    <Select id="limit-data" labeled={false} noemptyval bcolor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onChange={handleLimitChange} readonly={!isDataShown} disabled={selectedMode === "add"} />
                     {selectedMode === "view" && width >= 464 && <SwitchButton type="ico" buttons={viewSwitcher} />}
                   </Section>
                   <SwitchButton type={width >= 464 ? "reg" : "ico"} buttons={modeSwitcher} />
@@ -846,17 +798,17 @@ const DashboardSlugPage = () => {
                 {selectedMode === "add" && (
                   <Section isWrap gap="var(--pixel-10)">
                     <Form minW="var(--pixel-350)" onSubmit={(e) => handleSubmit(e, "cudevent", "event")}>
-                      <Input id="module-title" type="text" labelText="Judul Modul" placeholder="Masukkan judul modul" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
-                      <Input id="module-banner" variant="upload" labelText="Thumbnail Modul" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" onSelect={handleImageSelect} maxSize={5 * 1024 * 1024} isRequired />
+                      <Input id="module-title" type="text" label="Judul Modul" placeholder="Masukkan judul modul" name="judul" value={inputData.judul} onChange={handleInputChange} errormsg={errors.judul} required />
+                      <Input id="module-banner" type="file" accept="image/*" label="Thumbnail Modul" onChange={handleImageSelect} maxsize={5 * 1024 * 1024} required />
                       <Fieldset>
-                        <Input id="module-desc" type="text" labelText="Deskripsi Modul" placeholder="Masukkan deskripsi" name="desc" value={inputData.desc} onChange={handleInputChange} errorContent={errors.desc} isRequired />
-                        <Input id="module-date" type="text" labelText="Tanggal Event" placeholder="Masukkan tanggal" name="tanggal" value={inputData.tanggal} onChange={handleInputChange} errorContent={errors.tanggal} isRequired />
+                        <Input id="module-desc" type="text" label="Deskripsi Modul" placeholder="Masukkan deskripsi" name="desc" value={inputData.desc} onChange={handleInputChange} errormsg={errors.desc} required />
+                        <Input id="module-date" type="text" label="Tanggal Event" placeholder="Masukkan tanggal" name="tanggal" value={inputData.tanggal} onChange={handleInputChange} errormsg={errors.tanggal} required />
                       </Fieldset>
                       <Fieldset>
-                        <Input id="module-hl" type="text" labelText="Highlight Modul" placeholder="Masukkan highlight" name="highlight" value={inputData.highlight} onChange={handleInputChange} errorContent={errors.highlight} isRequired />
-                        <Input id="module-info" type="text" labelText="Informasi Modul" placeholder="Masukkan informasi" name="info" value={inputData.info} onChange={handleInputChange} errorContent={errors.info} isRequired />
+                        <Input id="module-hl" type="text" label="Highlight Modul" placeholder="Masukkan highlight" name="highlight" value={inputData.highlight} onChange={handleInputChange} errormsg={errors.highlight} required />
+                        <Input id="module-info" type="text" label="Informasi Modul" placeholder="Masukkan informasi" name="info" value={inputData.info} onChange={handleInputChange} errormsg={errors.info} required />
                       </Fieldset>
-                      <Input id="module-syarat" variant="textarea" rows={10} labelText="Syarat & Ketentuan" placeholder="Masukkan syarat & ketentuan" name="syarat" value={inputData.syarat} onChange={handleInputChange} errorContent={errors.syarat} isRequired />
+                      <Textarea id="module-syarat" rows={10} label="Syarat & Ketentuan" placeholder="Masukkan syarat & ketentuan" name="syarat" value={inputData.syarat} onChange={handleInputChange} errormsg={errors.syarat} required />
                       <EditorFooter>
                         <Button id="submit-action" type="submit" buttonText="Publish Modul" action="save" isLoading={isSubmitting} />
                       </EditorFooter>
@@ -875,9 +827,7 @@ const DashboardSlugPage = () => {
   };
 
   useEffect(() => {
-    if (width < 464) {
-      setSelectedView("list");
-    }
+    if (width < 464) setSelectedView("list");
   }, [width]);
 
   useEffect(() => {
@@ -892,10 +842,7 @@ const DashboardSlugPage = () => {
     fetchAdditionalData();
   }, [scope]);
 
-  if (userData.level !== "admin") {
-    <Navigate to="/404-not-found" />;
-  }
-
+  if (userData.level !== "admin") return <Navigate to="/404-not-found" />;
   return (
     <Fragment>
       <SEO title={pageTitle} route={`/dashboard/${scope}/${slug}`} isNoIndex />

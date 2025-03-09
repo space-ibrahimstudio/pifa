@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import { useDocument, toPathname } from "../libs/plugins/helpers";
-import AdSense from "../libs/plugins/adsense";
 import useApi from "../libs/plugins/apis";
 import useGraph from "../components/content/graph";
 import { SEO } from "../libs/plugins/seo";
@@ -23,13 +22,13 @@ const SearchPage = () => {
   const { apiRead, apiGet } = useApi();
   const { H1, Span } = useGraph();
 
-  const id = `${short}-${toPathname(query)}`;
-
   const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(12);
   const [searchedData, setSearchedData] = useState([]);
   const [ads, setAds] = useState([]);
   const [trendTagData, setTrendTagData] = useState([]);
+
+  const id = `${short}-${toPathname(query)}`;
 
   const fetchTagPosts = async (newLimit) => {
     if (loading) return;
@@ -107,7 +106,6 @@ const SearchPage = () => {
               </FeedsGroup>
               <Section flex="1" direction="column" alignItems="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
                 <Img style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
-                {/* <AdSense /> */}
               </Section>
             </Fragment>
           )}

@@ -10,12 +10,12 @@ export const AdBanner = ({ style, alt, src, onClick }) => {
 };
 
 export const PostImage = ({ alt = "", src }) => {
+  const [imageSrc, setImageSrc] = useState("");
+  const [isLoaded, setIsLoaded] = useState(false);
+
   const compid = alt ? toPathname(alt) : "";
   const prncss = { position: "relative", display: "inline-flex", width: "100%", borderRadius: "var(--pixel-20)", overflow: "hidden" };
   const crdcss = { position: "relative", width: "100%", height: "auto", objectFit: "cover", objectPosition: "center", borderRadius: "var(--pixel-20)", overflow: "hidden", zIndex: "0" };
-
-  const [imageSrc, setImageSrc] = useState("");
-  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     setIsLoaded(false);

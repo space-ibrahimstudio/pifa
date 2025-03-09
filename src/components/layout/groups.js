@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useContent, useWindow, useFormat } from "@ibrahimstudio/react";
-import { Input } from "@ibrahimstudio/input";
+import { Select } from "@ibrahimstudio/select";
 import useApi from "../../libs/plugins/apis";
 import { toPathname } from "../../libs/plugins/helpers";
 import { LoadingContent } from "../feedback/loader";
@@ -20,14 +20,14 @@ export const SectionGroup = ({ id, catId, scope, slug }) => {
   const { width } = useWindow();
   const { apiRead } = useApi();
 
-  const compid = `${id}-section-group-${slug}`;
-
   const [latestLoading, setLatestLoading] = useState(false);
   const [trendingLoading, setTrendingLoading] = useState(false);
   const [latestLimit, setLatestLimit] = useState(6);
   const [trendingLimit, setTrendingLimit] = useState(5);
   const [latestPostData, setLatestPostData] = useState([]);
   const [trendingPostData, setTrendingPostData] = useState([]);
+
+  const compid = `${id}-section-group-${slug}`;
 
   const fetchLatestPosts = async (newLimit) => {
     if (latestLoading) return;
@@ -228,7 +228,7 @@ export const FeedsGroup = ({ id, noFilter = false, postsFilter, setPostsFilter, 
         <div className={feecss.feedsTitlewrap}>
           <h1 className={feecss.feedsTitle}>Feeds</h1>
         </div>
-        {!noFilter && <Input id={`${compid}-switch-filter`} variant="select" noEmptyValue isLabeled={false} baseColor="var(--color-secondlight)" placeholder="Filter Jenis Berita" value={postsFilter} options={switchFilter} onSelect={switchStatus} />}
+        {!noFilter && <Select id={`${compid}-switch-filter`} noemptyval labeled={false} bcolor="var(--color-secondlight)" placeholder="Filter Jenis Berita" value={postsFilter} options={switchFilter} onChange={switchStatus} />}
       </header>
       <div ref={ref} className={feecss.feedsBody}>
         {React.Children.map(children, (child) => {
@@ -246,15 +246,6 @@ export const FeedsGroup = ({ id, noFilter = false, postsFilter, setPostsFilter, 
             }
           } else return child;
         })}
-        {/* {React.Children.map(children, (child) => {
-          if (React.isValidElement(child)) {
-            if (child.type === Fragment) {
-              return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
-            }
-            return React.cloneElement(child, { id: compid });
-          }
-          return child;
-        })} */}
         {loading && <LoadingContent />}
       </div>
     </section>

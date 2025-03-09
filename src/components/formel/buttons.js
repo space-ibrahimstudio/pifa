@@ -28,6 +28,7 @@ export const SwitchButton = ({ id, type = "reg", buttons = [] }) => {
 
 export const TagsButton = ({ id, text, type = "reg", onClick }) => {
   const { Close } = useIcons();
+
   const compid = `${id}-tags`;
 
   return (
@@ -41,9 +42,10 @@ export const TagsButton = ({ id, text, type = "reg", onClick }) => {
 };
 
 export const SourceButton = ({ id, to }) => {
-  const compid = `${id}-view-source`;
   const navigate = useNavigate();
   const handleClick = () => navigate(to);
+
+  const compid = `${id}-view-source`;
 
   return (
     <button id={compid} className={srccss.groupCta} onClick={handleClick}>
@@ -59,8 +61,10 @@ export const TabButtonGen = ({ id, text, type = "route", path, targetId, startCo
   const location = useLocation();
   const navigate = useNavigate();
   const { scroll } = useEvent();
-  const compid = text ? `${id}-tab-general-${toPathname(text)}` : `${id}-tab-general`;
+
   const [activeTab, setActiveTab] = useState(null);
+
+  const compid = text ? `${id}-tab-general-${toPathname(text)}` : `${id}-tab-general`;
 
   const handleClick = () => {
     if (type === "scroll") scroll(targetId, -70);

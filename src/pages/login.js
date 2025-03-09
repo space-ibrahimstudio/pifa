@@ -15,11 +15,11 @@ const LoginPage = () => {
   const { isLoggedin, login } = useAuth();
   const { H1, P } = useGraph();
 
-  const id = `${short}-login`;
-
   const [loading, setLoading] = useState(false);
   const [inputData, setInputData] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({ username: "", password: "" });
+
+  const id = `${short}-login`;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -59,8 +59,8 @@ const LoginPage = () => {
               <P align="center">Login dulu biar bisa komen, bikin konten dan atur notifikasi konten favoritmu. Yuk!</P>
             </Header>
             <Section alignItems="center" gap="var(--pixel-10)">
-              <Input id="username" isLabeled={false} type="text" name="username" value={inputData.username} placeholder="Telepon atau Email" isRequired onChange={handleInputChange} errorContent={errors.username} />
-              <Input id="password" isLabeled={false} type="password" name="password" value={inputData.password} placeholder="Password" isRequired onChange={handleInputChange} errorContent={errors.password} />
+              <Input id="username" labeled={false} type="text" name="username" value={inputData.username} placeholder="Telepon atau Email" required onChange={handleInputChange} errormsg={errors.username} />
+              <Input id="password" labeled={false} type="password" name="password" value={inputData.password} placeholder="Password" required onChange={handleInputChange} errormsg={errors.password} />
             </Section>
             <Section alignItems="center" gap="var(--pixel-10)">
               <Button id="submit-login" type="submit" isFullwidth buttonText="Login" isLoading={loading} />

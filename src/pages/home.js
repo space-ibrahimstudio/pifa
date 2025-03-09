@@ -23,8 +23,6 @@ const HomePage = () => {
   const { apiRead, apiGet } = useApi();
   const { H1, Span } = useGraph();
 
-  const id = `${short}-home`;
-
   const [limit, setLimit] = useState(13);
   const [loading, setLoading] = useState(false);
   const [trendingPostData, setTrendingPostData] = useState([]);
@@ -34,6 +32,8 @@ const HomePage = () => {
   const [trendTagData, setTrendTagData] = useState([]);
   const [latestPostData, setLatestPostData] = useState([]);
   const [popularPostData, setPopularPostData] = useState([]);
+
+  const id = `${short}-home`;
 
   const renderLocalCat = (item) => <CatCard id={item.id} catname={item.nama_kategori_daerah} image={item.img} onClick={() => window.open(`https://${item.subdomain}.pifa.co.id`, "_blank")} />;
   const renderAds = (item) => <AdBanner alt={item.idbanner} src={`${imgdomain}/images/banner/${item.bannerimg}`} />;

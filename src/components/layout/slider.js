@@ -7,16 +7,16 @@ const Slider = ({ id, title, scope, content, renderContent, swipeThreshold = 50,
   const ref = useRef(null);
   const contentRef = useRef([]);
 
-  const compid = (title && scope && `${id}-slider-news-${toPathname(title)}-${toPathname(scope)}`) || `${id}-slider-news`;
-  const totalContent = content.length;
-  const mockedContent = [...content, ...content, ...content];
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const [contentWidth, setContentWidth] = useState(0);
   const [contentGap, setContentGap] = useState(0);
   const [visible, setVisible] = useState(false);
   const [hover, setHover] = useState(false);
   const [startX, setStartX] = useState(null);
+
+  const compid = (title && scope && `${id}-slider-news-${toPathname(title)}-${toPathname(scope)}`) || `${id}-slider-news`;
+  const totalContent = content.length;
+  const mockedContent = [...content, ...content, ...content];
 
   const handleVisible = () => {
     const rect = ref.current?.getBoundingClientRect();

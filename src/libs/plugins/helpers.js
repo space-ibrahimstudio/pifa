@@ -21,9 +21,7 @@ export const inputValidator = (formData, requiredFields) => {
     if (Array.isArray(data[field])) {
       data[field].forEach((item, index) => {
         Object.keys(item).forEach((key) => {
-          if (requiredFields.includes(`${field}.${key}`)) {
-            checkRequired(item[key], key, [...path, field, index, key]);
-          }
+          if (requiredFields.includes(`${field}.${key}`)) checkRequired(item[key], key, [...path, field, index, key]);
         });
       });
     } else checkRequired(data[field], field, [...path, field]);

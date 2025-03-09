@@ -72,8 +72,4 @@ const useLocStorage = () => {
   return { setL, getL, rmvL, setLWithExp, getLWithExp };
 };
 
-// setWithExpiry("userSession", { username: "user1" }, 3600000);
-// const sessionData = getWithExpiry("userSession");
-// console.log(sessionData);
-
 export default useLocStorage;

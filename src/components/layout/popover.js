@@ -7,9 +7,9 @@ const modalRoot = document.getElementById("modal-root") || document.body;
 const PopOver = ({ onSubmit, onClose, children }) => {
   const ref = useRef(null);
 
-  const compid = `popover-form`;
-
   const [isClosing, setIsClosing] = useState(false);
+
+  const compid = `popover-form`;
 
   const handleClickOutside = (e) => {
     if (ref.current && !ref.current.contains(e.target)) setIsClosing(true);
@@ -58,15 +58,6 @@ const PopOver = ({ onSubmit, onClose, children }) => {
               }
             } else return child;
           })}
-          {/* {React.Children.map(children, (child) => {
-            if (React.isValidElement(child)) {
-              if (child.type === Fragment) {
-                return <Fragment>{React.Children.map(child.props.children, (fragmentChild) => (React.isValidElement(fragmentChild) ? React.cloneElement(fragmentChild, { id: compid }) : fragmentChild))}</Fragment>;
-              }
-              return React.cloneElement(child, { id: compid });
-            }
-            return child;
-          })} */}
         </form>
       </section>
     </main>

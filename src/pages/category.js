@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import useApi from "../libs/plugins/apis";
 import { useDocument } from "../libs/plugins/helpers";
-import AdSense from "../libs/plugins/adsense";
 import { SEO } from "../libs/plugins/seo";
 import useLoading from "../components/feedback/loader";
 import useGraph from "../components/content/graph";
@@ -26,8 +25,6 @@ const CategoryPage = () => {
   const { setLoading } = useLoading();
   const { H1, Span } = useGraph();
 
-  const id = (category && `${short}-${category}`) || `${short}-category`;
-
   const [pageInfo, setPageInfo] = useState({ id: "", title: "", desc: "", path: "", thumbnail: "" });
   const [latestPostData, setLatestPostData] = useState([]);
   const [trendingPostData, setTrendingPostData] = useState([]);
@@ -39,6 +36,8 @@ const CategoryPage = () => {
   const [feedsLoading, setFeedsLoading] = useState(false);
   const [ads, setAds] = useState([]);
   const [trendTagData, setTrendTagData] = useState([]);
+
+  const id = (category && `${short}-${category}`) || `${short}-category`;
 
   const fetchCatNewsData = async () => {
     try {
@@ -244,7 +243,6 @@ const CategoryPage = () => {
           </FeedsGroup>
           <Section flex="1" direction="column" alignItems="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
             <Img style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
-            {/* <AdSense /> */}
           </Section>
         </Container>
         <Container alignItems="center" gap="var(--pixel-10)">

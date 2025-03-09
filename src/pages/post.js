@@ -4,13 +4,12 @@ import { useWindow } from "@ibrahimstudio/react";
 import { useDocument } from "../libs/plugins/helpers";
 import useLoading from "../components/feedback/loader";
 import useApi from "../libs/plugins/apis";
-import AdSense from "../libs/plugins/adsense";
 import useGraph from "../components/content/graph";
 import { SEO } from "../libs/plugins/seo";
 import Page, { Container, Section } from "../components/layout/frames";
 import Slider from "../components/layout/slider";
 import Article from "../components/content/article";
-import Img, { AdBanner, PostImage } from "../components/media/image";
+import { AdBanner, PostImage } from "../components/media/image";
 import { TagsButton } from "../components/formel/buttons";
 import NewsCard from "../components/layout/cards";
 import SectionHead from "../components/feedback/markers";
@@ -28,8 +27,6 @@ const PostPage = () => {
   const { setLoading } = useLoading();
   const { H1, Span, P } = useGraph();
 
-  const id = (slug && `${short}-${slug}`) || `${short}-slug`;
-
   const [pageInfo, setPageInfo] = useState({ title: "", cat: "", desc: "", path: "", cat_path: "", thumbnail: "" });
   const [postDetailData, setPostDetailData] = useState([]);
   const [postTags, setPostTags] = useState([]);
@@ -38,6 +35,8 @@ const PostPage = () => {
   const [trendingPostData, setTrendingPostData] = useState([]);
   const [ads, setAds] = useState([]);
   const [relatedPostData, setRelatedPostData] = useState([]);
+
+  const id = (slug && `${short}-${slug}`) || `${short}-slug`;
 
   const fetchDetailPost = async () => {
     setLoading(true);
@@ -148,8 +147,6 @@ const PostPage = () => {
             </Section>
             <Section cwidth="100%" maxWidth={width <= 930 ? "100%" : "var(--pixel-400)"} gap="var(--pixel-10)">
               <NewsSummaryGroup id={id} style={{ flexShrink: "unset" }} isPortrait={width <= 930} title="Rekomendasi" to="/berita/insight/rekomendasi" posts={trendingPostData.filter((item) => item.slug !== slug)} setLimit={setTrendLimit} loading={trendLoading} />
-              {/* <Img style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="COBLOS NO 1" src={width <= 930 ? "/img/ad/wide-5.png" : "/img/ad/narrow-1.png"} /> */}
-              {/* <AdSense /> */}
             </Section>
           </Section>
         </Container>

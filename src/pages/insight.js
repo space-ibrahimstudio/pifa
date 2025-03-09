@@ -22,14 +22,14 @@ const InsightPage = () => {
   const { apiRead, apiGet } = useApi();
   const { H1, Span } = useGraph();
 
-  const id = (islug && `${short}-${islug}`) || `${short}-slug`;
-
   const [loading, setLoading] = useState(false);
   const [limit, setLimit] = useState(12);
   const [pageData, setPageData] = useState([]);
   const [pageInfo, setPageInfo] = useState({ title: "", desc: "", content: "", created: "", updated: "", path: "", thumbnail: "" });
   const [ads, setAds] = useState([]);
   const [trendTagData, setTrendTagData] = useState([]);
+
+  const id = (islug && `${short}-${islug}`) || `${short}-slug`;
 
   const fetchTrendTagData = async () => {
     try {

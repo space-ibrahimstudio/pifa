@@ -19,13 +19,13 @@ const Navbar = ({ id, parentType = "public" }) => {
   const { width } = useWindow();
   const { Close } = useIcons();
 
-  const compid = `${id}-top-navigation`;
-
   const [scrolled, setScrolled] = useState(false);
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [publicMenus, setPublicMenus] = useState([]);
   const [privateMenus, setPrivateMenus] = useState([]);
+
+  const compid = `${id}-top-navigation`;
 
   const handleLogout = () => logout();
   const handleSearch = (e) => {
@@ -80,7 +80,7 @@ const Navbar = ({ id, parentType = "public" }) => {
       <section className={`${styles.navBottom} ${parentType === "private" ? "" : styles.pub}`}>
         {searchOpen && width <= 580 ? (
           <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", margin: "0", flexShrink: "0", boxSizing: "border-box", flex: "1" }} onKeyDown={handleSearch}>
-            <Input id={`${compid}-search`} isLabeled={false} type="text" name="query" value={query} placeholder="Cari Berita Terkini" onChange={(e) => setQuery(e.target.value)} startContent={<ISSearch />} />
+            <Input id={`${compid}-search`} labeled={false} type="text" name="query" value={query} placeholder="Cari Berita Terkini" onChange={(e) => setQuery(e.target.value)} leadingicon={<ISSearch />} />
           </div>
         ) : (
           <nav className={`${styles.navMenu} ${parentType === "private" ? "" : styles.pub}`}>
@@ -107,10 +107,10 @@ const Navbar = ({ id, parentType = "public" }) => {
         {parentType !== "private" &&
           (width > 580 ? (
             <div className={styles.navSearch} onKeyDown={handleSearch}>
-              <Input id={`${compid}-search`} isLabeled={false} type="text" name="query" value={query} placeholder="Cari Berita Terkini" onChange={(e) => setQuery(e.target.value)} endContent={<ISSearch />} />
+              <Input id={`${compid}-search`} labeled={false} type="text" name="query" value={query} placeholder="Cari Berita Terkini" onChange={(e) => setQuery(e.target.value)} trailingicon={<ISSearch />} />
             </div>
           ) : (
-            <Button id={searchOpen ? `${compid}-close-search` : `${compid}-open-search`} size="sm" variant="hollow" subVariant="icon" color="var(--color-secondary)" iconContent={searchOpen ? <Close /> : <ISSearch />} onClick={() => setSearchOpen(!searchOpen)} />
+            <Button id={searchOpen ? `${compid}-close-search` : `${compid}-open-search`} size="sm" variant="hollow" display="icon" color="var(--color-secondary)" iconContent={searchOpen ? <Close /> : <ISSearch />} onClick={() => setSearchOpen(!searchOpen)} />
           ))}
       </section>
     </header>

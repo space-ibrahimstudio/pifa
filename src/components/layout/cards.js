@@ -19,11 +19,11 @@ import tagcss from "./styles/tag-card.module.css";
 import bancss from "./styles/banner-card.module.css";
 
 export const ImageCard = ({ alt, src }) => {
-  const compid = (alt && `Pifa image ${toPathname(alt)}`) || "Pifa image";
-  const crdcss = { position: "absolute", top: "0", left: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", zIndex: "0" };
-
   const [imageSrc, setImageSrc] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const compid = (alt && `Pifa image ${toPathname(alt)}`) || "Pifa image";
+  const crdcss = { position: "absolute", top: "0", left: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", zIndex: "0" };
 
   useEffect(() => {
     setIsLoaded(false);
@@ -82,7 +82,7 @@ export const BannerCard = ({ type, src, isUploading, onUpload, onDelete, draggab
             <img className={bancss.bannerImage} src={src} loading="lazy" alt="" />
           </section>
           <section className={bancss.bannerAction}>
-            <Button size="sm" subVariant="icon" color="var(--color-red)" bgColor="var(--color-red-5)" iconContent={<Trash size="var(--pixel-20)" />} onClick={onDelete} />
+            <Button size="sm" display="icon" color="var(--color-red)" bgColor="var(--color-red-5)" iconContent={<Trash size="var(--pixel-20)" />} onClick={onDelete} />
           </section>
         </Fragment>
       )}
@@ -92,6 +92,7 @@ export const BannerCard = ({ type, src, isUploading, onUpload, onDelete, draggab
 
 export const EventDetailCard = ({ id, title, day, date, onEdit, onDelete }) => {
   const { Trash, Edit } = useIcons();
+
   const compid = (title && `${id}-event-detail-card-${toPathname(title)}`) || `${id}-event-detail-card`;
 
   return (
@@ -103,7 +104,7 @@ export const EventDetailCard = ({ id, title, day, date, onEdit, onDelete }) => {
         </span>
       </header>
       <Button id={`${compid}-action-edit`} size="sm" color="var(--color-primary)" bgColor="var(--color-primary-5)" buttonText="Edit" startContent={<Edit size="var(--pixel-20)" />} onClick={onEdit} />
-      <Button id={`${compid}-action-delete`} size="sm" subVariant="icon" color="var(--color-red)" bgColor="var(--color-red-5)" iconContent={<Trash size="var(--pixel-20)" />} onClick={onDelete} />
+      <Button id={`${compid}-action-delete`} size="sm" display="icon" color="var(--color-red)" bgColor="var(--color-red-5)" iconContent={<Trash size="var(--pixel-20)" />} onClick={onDelete} />
     </section>
   );
 };
@@ -111,7 +112,9 @@ export const EventDetailCard = ({ id, title, day, date, onEdit, onDelete }) => {
 export const TagCard = ({ id, openState = false, title = "", timeCreate, timeUpdate, onEdit, inputData, onChange, onClose, onSave, onDelete, isDisabled = false }) => {
   const { newDate } = useFormat();
   const { Close, Trash, Edit } = useIcons();
+
   const [editOpen, setEditOpen] = useState(openState);
+
   const compid = (title && `${id}-tag-card-${toPathname(title)}`) || `${id}-tag-card`;
 
   const openEdit = () => {
@@ -132,9 +135,9 @@ export const TagCard = ({ id, openState = false, title = "", timeCreate, timeUpd
 
   return editOpen ? (
     <form id={compid} className={tagcss.tagCard} onSubmit={handleSave}>
-      <Input id={`${id}-tag-name`} type="text" isLabeled={false} placeholder="Masukkan nama tag" name="name" value={inputData.name} onChange={onChange} isRequired />
+      <Input id={`${id}-tag-name`} type="text" labeled={false} placeholder="Masukkan nama tag" name="name" value={inputData.name} onChange={onChange} required />
       <Button id={`${compid}-action-edit`} type="submit" buttonText="Simpan" />
-      <Button id={`${compid}-action-cancel`} type="button" subVariant="icon" color="var(--color-red)" bgColor="var(--color-red-5)" iconContent={<Close />} onClick={closeEdit} />
+      <Button id={`${compid}-action-cancel`} type="button" display="icon" color="var(--color-red)" bgColor="var(--color-red-5)" iconContent={<Close />} onClick={closeEdit} />
     </form>
   ) : (
     <section id={compid} className={tagcss.tagCard}>
@@ -145,13 +148,14 @@ export const TagCard = ({ id, openState = false, title = "", timeCreate, timeUpd
         </span>
       </header>
       <Button id={`${compid}-action-edit`} color="var(--color-primary)" bgColor="var(--color-primary-5)" buttonText="Edit" startContent={<Edit size="var(--pixel-20)" />} onClick={openEdit} isDisabled={isDisabled} />
-      <Button id={`${compid}-action-delete`} subVariant="icon" color="var(--color-red)" bgColor="var(--color-red-5)" iconContent={<Trash size="var(--pixel-20)" />} onClick={onDelete} isDisabled={isDisabled} />
+      <Button id={`${compid}-action-delete`} display="icon" color="var(--color-red)" bgColor="var(--color-red-5)" iconContent={<Trash size="var(--pixel-20)" />} onClick={onDelete} isDisabled={isDisabled} />
     </section>
   );
 };
 
 export const OGCard = ({ id, image, title = "", mssg, scope = "/", desc = "" }) => {
   const { company, domain } = useDocument();
+
   const compid = (title && `${id}-og-card-${toPathname(title)}`) || `${id}-og-card`;
 
   return (
@@ -174,6 +178,7 @@ export const OGCard = ({ id, image, title = "", mssg, scope = "/", desc = "" }) 
 
 export const CatAdmCard = ({ id, title, short, image, tag, onEdit, style, draggable = false, onDragStart, onDragOver, onDrop }) => {
   const { Edit } = useIcons();
+
   const compid = (title && `${id}-category-admin-card-${toPathname(title)}`) || `${id}-category-admin-card`;
   const cardimg = image === "" ? "/img/fallback.jpg" : image;
   const cardshrt = short === "" ? "no description." : short;
@@ -208,6 +213,7 @@ export const CatCard = ({ id, catname, image, onClick }) => {
 
 export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, slug, align = "stretch", height = "var(--pixel-270)", flex }) => {
   const { toTitleCase } = useContent();
+
   const compid = (title && tag && `${id}-display-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-display-card`;
   const carddesc = (short && stripHtml(short)) || "No description";
   const cardloc = (loc && toTitleCase(loc)) || "N/A";
@@ -238,6 +244,7 @@ export const NewsDisplayCard = ({ id, title, short, tag, image, loc, date, slug,
 
 export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, slug }) => {
   const { toTitleCase } = useContent();
+
   const compid = (title && tag && `${id}-summary-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-summary-card`;
   const cardloc = (loc && toTitleCase(loc)) || "N/A";
 
@@ -279,6 +286,7 @@ export const NewsSummaryCard = ({ id, isPortrait, title, tag, image, loc, date, 
 
 export const NewsFeedCard = ({ id, title, short, tag, image, loc, date, slug }) => {
   const { toTitleCase } = useContent();
+
   const compid = (title && tag && `${id}-feed-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-feed-card`;
   const carddesc = (short && stripHtml(short)) || "No description";
   const cardloc = (loc && toTitleCase(loc)) || "N/A";
@@ -326,6 +334,7 @@ export const InfographicCard = ({ id, title, image, count = "0", status, onClick
 
 const NewsCard = ({ id, title, short, tag, image, loc, date, slug }) => {
   const { toTitleCase } = useContent();
+
   const compid = (title && tag && `${id}-news-card-${toPathname(title)}-${toPathname(tag)}`) || `${id}-news-card`;
   const carddesc = (short && stripHtml(short)) || "No description";
   const cardloc = (loc && toTitleCase(loc)) || "N/A";

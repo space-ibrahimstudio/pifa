@@ -1,8 +1,10 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useParams, Navigate, useNavigate } from "react-router-dom";
 import { useDevmode } from "@ibrahimstudio/react";
+import { Select } from "@ibrahimstudio/select";
 import { Input } from "@ibrahimstudio/input";
 import { Button } from "@ibrahimstudio/button";
+import { Textarea } from "@ibrahimstudio/textarea";
 import useApi from "../../libs/plugins/apis";
 import useAuth from "../../libs/guards/auth";
 import useGraph from "../../components/content/graph";
@@ -29,7 +31,7 @@ const DashboardUpdatePage = () => {
   const { inputSch, errorSch } = useInputSchema();
   const { H1, P } = useGraph();
   const { Arrow, Trash } = useIcons();
-  const id = `${short}-${params}`;
+
   const [isFetching, setIsFetching] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -41,10 +43,8 @@ const DashboardUpdatePage = () => {
   const [selectedID, setSelectedID] = useState("");
   const [selectedSlug, setSelectedSlug] = useState("");
   const [pageTitle, setPageTitle] = useState("");
-
   const [inputData, setInputData] = useState({ ...inputSch });
   const [errors, setErrors] = useState({ ...errorSch });
-
   const [newsCatData, setNewsCatData] = useState([]);
   const [localCatData, setLocalCatData] = useState([]);
   const [localeDate, setLocaleDate] = useState("");
@@ -55,6 +55,7 @@ const DashboardUpdatePage = () => {
   const [selectedCatType, setSelectedCatType] = useState("berita");
   const [moduleDetData, setModuleDetData] = useState([]);
 
+  const id = `${short}-${params}`;
   const daysOfWeek = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
   const monthsObj = { Januari: "01", Februari: "02", Maret: "03", April: "04", Mei: "05", Juni: "06", Juli: "07", Agustus: "08", September: "09", Oktober: "10", November: "11", Desember: "12" };
@@ -120,16 +121,10 @@ const DashboardUpdatePage = () => {
               addtFormData.append("data", JSON.stringify({ secret: userData.token_activation, kategori: "daerah" }));
               const beritares = await apiRead(formData, "office", "viewcategory");
               const daerahres = await apiRead(addtFormData, "office", "viewcategory");
-              if (beritares && beritares.data && beritares.data.length > 0) {
-                beritadata = beritares.data;
-              } else {
-                beritadata = [];
-              }
-              if (daerahres && daerahres.data && daerahres.data.length > 0) {
-                daerahdata = daerahres.data;
-              } else {
-                daerahdata = [];
-              }
+              if (beritares && beritares.data && beritares.data.length > 0) beritadata = beritares.data;
+              else beritadata = [];
+              if (daerahres && daerahres.data && daerahres.data.length > 0) daerahdata = daerahres.data;
+              else daerahdata = [];
               mergeddata = [...beritadata, ...daerahdata];
               const categorydata = mergeddata.find((item) => item.slug === params);
               if (categorydata) {
@@ -227,41 +222,28 @@ const DashboardUpdatePage = () => {
     if (file && file.type.startsWith("image/")) {
       const url = URL.createObjectURL(file);
       setSelectedImageUrl(url);
-    } else {
-      setSelectedImageUrl(null);
-    }
+    } else setSelectedImageUrl(null);
   };
 
   const handleTagSearch = (e) => {
     const value = e.target.value;
     setTagQuery(value);
-    if (value) {
-      fetchTagSuggests(value);
-    } else {
-      setTagSuggests([]);
-    }
+    if (value) fetchTagSuggests(value);
+    else setTagSuggests([]);
   };
 
   const handleAddTag = (tag) => {
-    if (!selectedTags.some((existingTag) => existingTag.tag === tag.nama_kategori_tag)) {
-      setSelectedTags([...selectedTags, { tag: tag.nama_kategori_tag }]);
-    }
+    if (!selectedTags.some((existingTag) => existingTag.tag === tag.nama_kategori_tag)) setSelectedTags([...selectedTags, { tag: tag.nama_kategori_tag }]);
     setTagQuery("");
     setTagSuggests([]);
   };
 
-  const handleRemoveTag = (tagToRemove) => {
-    setSelectedTags(selectedTags.filter((tag) => tag.tag !== tagToRemove));
-  };
-
+  const handleRemoveTag = (tagToRemove) => setSelectedTags(selectedTags.filter((tag) => tag.tag !== tagToRemove));
   const switchData = async (params) => {
     setSelectedData(params);
     const currentData = (arraydata, identifier) => {
-      if (typeof identifier === "string") {
-        return arraydata.find((item) => getNestedValue(item, identifier) === params);
-      } else {
-        return arraydata.find((item) => item[identifier] === params);
-      }
+      if (typeof identifier === "string") return arraydata.find((item) => getNestedValue(item, identifier) === params);
+      else return arraydata.find((item) => item[identifier] === params);
     };
     const errormsg = `Terjadi kesalahan saat memuat data. Mohon periksa koneksi internet anda dan coba lagi.`;
     let switchedData;
@@ -323,9 +305,7 @@ const DashboardUpdatePage = () => {
     const successmsg = "Selamat! Perubahan data berhasil disimpan.";
     const errormsg = "Terjadi kesalahan saat menyimpan perubahan. Mohon periksa koneksi internet anda dan coba lagi.";
     const confirm = window.confirm(confirmmsg);
-    if (!confirm) {
-      return;
-    }
+    if (!confirm) return;
     setIsSubmitting(true);
     try {
       let submittedData;
@@ -373,9 +353,7 @@ const DashboardUpdatePage = () => {
     const successmsg = "Selamat! Data terpilih berhasil dihapus.";
     const errormsg = "Terjadi kesalahan saat menghapus data. Mohon periksa koneksi internet anda dan coba lagi.";
     const confirm = window.confirm(confirmmsg);
-    if (!confirm) {
-      return;
-    }
+    if (!confirm) return;
     setIsSubmitting(true);
     try {
       let submittedData;
@@ -412,9 +390,7 @@ const DashboardUpdatePage = () => {
       }
       const formData = new FormData();
       formData.append("data", JSON.stringify(submittedData));
-      if (uslug === "kategori" || uslug === "module") {
-        formData.append("iddel", selectedID);
-      }
+      if (uslug === "kategori" || uslug === "module") formData.append("iddel", selectedID);
       await apiCrud(formData, sendpoint, endpoint);
       alert(successmsg);
       log("submitted data:", submittedData);
@@ -452,9 +428,7 @@ const DashboardUpdatePage = () => {
               const successmsg = "Selamat! Perubahan data berhasil disimpan.";
               const errormsg = "Terjadi kesalahan saat menyimpan perubahan. Mohon periksa koneksi internet anda dan coba lagi.";
               const confirm = window.confirm(confirmmsg);
-              if (!confirm) {
-                return;
-              }
+              if (!confirm) return;
               setIsSubmitting(true);
               try {
                 const base64Content = btoa(unescape(encodeURIComponent(`<div>${content}</div>`)));
@@ -478,7 +452,6 @@ const DashboardUpdatePage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     Update Berita
                   </H1>
-                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Button id="back-button" buttonText="Kembali" onClick={() => navigate(-1)} startContent={<Arrow size="var(--pixel-25)" direction="left" />} />
@@ -486,16 +459,16 @@ const DashboardUpdatePage = () => {
                 </Section>
                 <Section isWrap gap="var(--pixel-10)">
                   <TextEditor maxW="var(--pixel-700)" initialContent={initialContent} onSubmit={handleUpdate}>
-                    <Input id="post-title" type="text" labelText="Judul Berita" placeholder="Masukkan judul berita" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
-                    <Input id="post-banner" variant="upload" labelText="Thumbnail Berita" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" initialImage={inputData.image} onSelect={handleImageSelect} maxSize={5 * 1024 * 1024} isRequired />
-                    <Input id="post-alt" type="text" labelText="Thumbnail Alt" placeholder="Masukkan alternatif text" name="thumbnail" value={inputData.thumbnail} onChange={handleInputChange} errorContent={errors.thumbnail} isRequired />
+                    <Input id="post-title" type="text" label="Judul Berita" placeholder="Masukkan judul berita" name="judul" value={inputData.judul} onChange={handleInputChange} errormsg={errors.judul} required />
+                    <Input id="post-banner" type="file" accept="image/*" label="Thumbnail Berita" initial={inputData.image} onChange={handleImageSelect} maxsize={5 * 1024 * 1024} required />
+                    <Input id="post-alt" type="text" label="Thumbnail Alt" placeholder="Masukkan alternatif text" name="thumbnail" value={inputData.thumbnail} onChange={handleInputChange} errormsg={errors.thumbnail} required />
                     <Fieldset>
-                      <Input id="post-catnews" variant="select" isSearchable labelText="Kategori Berita" placeholder="Pilih kategori berita" name="catberita" value={inputData.catberita} options={newsCatData.map((item) => ({ value: item.id, label: item.nama_kategori_berita }))} onSelect={(selectedValue) => handleInputChange({ target: { name: "catberita", value: selectedValue } })} errorContent={errors.catberita} isRequired />
-                      <Input id="post-catlocal" variant="select" isSearchable labelText="Kategori Daerah" placeholder="Pilih kategori daerah" name="catdaerah" value={inputData.catdaerah} options={localCatData.map((item) => ({ value: item.id, label: item.nama_kategori_daerah }))} onSelect={(selectedValue) => handleInputChange({ target: { name: "catdaerah", value: selectedValue } })} errorContent={errors.catdaerah} isRequired />
+                      <Select id="post-catnews" searchable label="Kategori Berita" placeholder="Pilih kategori berita" name="catberita" value={inputData.catberita} options={newsCatData.map((item) => ({ value: item.id, label: item.nama_kategori_berita }))} onChange={(selectedValue) => handleInputChange({ target: { name: "catberita", value: selectedValue } })} errormsg={errors.catberita} required />
+                      <Select id="post-catlocal" searchable label="Kategori Daerah" placeholder="Pilih kategori daerah" name="catdaerah" value={inputData.catdaerah} options={localCatData.map((item) => ({ value: item.id, label: item.nama_kategori_daerah }))} onChange={(selectedValue) => handleInputChange({ target: { name: "catdaerah", value: selectedValue } })} errormsg={errors.catdaerah} required />
                     </Fieldset>
                     <Fieldset>
-                      <Input id="post-date" type="date" labelText="Tanggal Terbit" name="post_date" value={inputData.post_date} onChange={handleInputChange} errorContent={errors.post_date} isRequired />
-                      <Input id="post-writer" type="text" labelText="Penulis Berita" placeholder="Masukkan nama penulis" name="penulis" value={inputData.penulis} onChange={handleInputChange} errorContent={errors.penulis} isRequired />
+                      <Input id="post-date" type="date" label="Tanggal Terbit" name="post_date" value={inputData.post_date} onChange={handleInputChange} errormsg={errors.post_date} required />
+                      <Input id="post-writer" type="text" label="Penulis Berita" placeholder="Masukkan nama penulis" name="penulis" value={inputData.penulis} onChange={handleInputChange} errormsg={errors.penulis} required />
                     </Fieldset>
                     <EditorToolbar tools={tools} />
                     <EditorContent />
@@ -506,7 +479,7 @@ const DashboardUpdatePage = () => {
                         ))}
                       </Fieldset>
                     )}
-                    <Input id="post-tag" type="text" labelText="Tag Berita" placeholder="Cari tag berita" name="tagQuery" value={tagQuery} onChange={handleTagSearch} />
+                    <Input id="post-tag" type="text" label="Tag Berita" placeholder="Cari tag berita" name="tagQuery" value={tagQuery} onChange={handleTagSearch} />
                     {tagSuggests.length > 0 && (
                       <Fieldset>
                         {tagSuggests.map((item, index) => (
@@ -534,7 +507,6 @@ const DashboardUpdatePage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     {selectedCatType === "berita" ? "Kategori Berita" : "Kategori Daerah"}
                   </H1>
-                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Button id="back-button" buttonText="Kembali" onClick={() => navigate(-1)} startContent={<Arrow size="var(--pixel-25)" direction="left" />} />
@@ -542,9 +514,9 @@ const DashboardUpdatePage = () => {
                 </Section>
                 <Section isWrap gap="var(--pixel-10)">
                   <Form minW="var(--pixel-350)" onSubmit={selectedCatType === "berita" ? (e) => handleSubmit(e, "cudcatberita") : (e) => handleSubmit(e, "cudcatdaerah")}>
-                    <Input id="cat-image" variant="upload" labelText="Thumbnail (og:image)" isPreview note="Rekomendasi ukuran: 920 x 470 pixels" initialImage={inputData.image} onSelect={handleImageSelect} isRequired />
-                    <Input id="cat-title" type="text" labelText="Judul (og:title)" placeholder="Masukkan judul kategori" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
-                    <Input id="cat-desc" type="text" labelText="Deskripsi (og:description)" placeholder="Masukkan deskripsi kategori" name="desc" value={inputData.desc} onChange={handleInputChange} errorContent={errors.desc} isRequired />
+                    <Input id="cat-image" type="file" accept="image/*" label="Thumbnail (og:image)" initial={inputData.image} onChange={handleImageSelect} required />
+                    <Input id="cat-title" type="text" label="Judul (og:title)" placeholder="Masukkan judul kategori" name="judul" value={inputData.judul} onChange={handleInputChange} errormsg={errors.judul} required />
+                    <Input id="cat-desc" type="text" label="Deskripsi (og:description)" placeholder="Masukkan deskripsi kategori" name="desc" value={inputData.desc} onChange={handleInputChange} errormsg={errors.desc} required />
                     <EditorFooter>
                       <Button id="submit-action" type="submit" buttonText="Simpan Perubahan" action="save" isLoading={isSubmitting} />
                     </EditorFooter>
@@ -600,26 +572,19 @@ const DashboardUpdatePage = () => {
               const successmsg = selectedState === "exist" ? "Selamat! Perubahan data berhasil disimpan." : "Selamat! Data baru berhasil ditambahkan.";
               const errormsg = selectedState === "exist" ? "Terjadi kesalahan saat menyimpan perubahan. Mohon periksa koneksi internet anda dan coba lagi." : "Terjadi kesalahan saat menambahkan data. Mohon periksa koneksi internet anda dan coba lagi.";
               const confirm = window.confirm(confirmmsg);
-              if (!confirm) {
-                return;
-              }
+              if (!confirm) return;
               setIsSubmitting(true);
               try {
                 const submittedData = { secret: userData.token_activation, idevent: selectedID, judul: inputData.event_title, hari: inputData.event_day, info: inputData.event_info, biaya: inputData.event_cost, tanggal: inputData.event_date, alamat: inputData.event_loc, koordinat: inputData.event_coords, panduan: inputData.event_guide, slug: selectedSlug };
                 const formData = new FormData();
                 formData.append("data", JSON.stringify(submittedData));
-                if (selectedState === "exist") {
-                  formData.append("idedit", selectedData);
-                }
+                if (selectedState === "exist") formData.append("idedit", selectedData);
                 formData.append("fileimg", selectedImg);
                 await apiCrud(formData, "event", "cudeventdetail");
                 alert(successmsg);
                 log("submitted data:", submittedData);
-                if (selectedState === "exist") {
-                  closeEventEdit();
-                } else {
-                  closeEventForm();
-                }
+                if (selectedState === "exist") closeEventEdit();
+                else closeEventForm();
                 await fetchData();
                 await fetchAdditionalData();
               } catch (error) {
@@ -635,9 +600,7 @@ const DashboardUpdatePage = () => {
               const successmsg = "Selamat! Data terpilih berhasil dihapus.";
               const errormsg = "Terjadi kesalahan saat menghapus data. Mohon periksa koneksi internet anda dan coba lagi.";
               const confirm = window.confirm(confirmmsg);
-              if (!confirm) {
-                return;
-              }
+              if (!confirm) return;
               setIsSubmitting(true);
               try {
                 const submittedData = { secret: userData.token_activation, idevent: "", judul: "", hari: "", info: "", biaya: "", tanggal: "", alamat: "", koordinat: "", panduan: "", slug: "" };
@@ -663,7 +626,6 @@ const DashboardUpdatePage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     Modul Event
                   </H1>
-                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Button id="back-button" buttonText="Kembali" onClick={() => navigate(-1)} startContent={<Arrow size="var(--pixel-25)" direction="left" />} />
@@ -672,17 +634,17 @@ const DashboardUpdatePage = () => {
                 <Section isWrap gap="var(--pixel-10)">
                   <Form minW="var(--pixel-350)" onSubmit={(e) => handleSubmit(e, "cudevent", "event")}>
                     <H1 color="var(--color-secondary)">1. Modul Utama</H1>
-                    <Input id="module-title" type="text" labelText="Judul Modul" placeholder="Masukkan judul modul" name="judul" value={inputData.judul} onChange={handleInputChange} errorContent={errors.judul} isRequired />
-                    <Input id="module-banner" variant="upload" labelText="Thumbnail Modul" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" initialImage={inputData.image} onSelect={handleImageSelect} maxSize={5 * 1024 * 1024} isRequired />
+                    <Input id="module-title" type="text" label="Judul Modul" placeholder="Masukkan judul modul" name="judul" value={inputData.judul} onChange={handleInputChange} errormsg={errors.judul} required />
+                    <Input id="module-banner" type="file" label="Thumbnail Modul" initial={inputData.image} onChange={handleImageSelect} maxsize={5 * 1024 * 1024} required />
                     <Fieldset>
-                      <Input id="module-desc" type="text" labelText="Deskripsi Modul" placeholder="Masukkan deskripsi" name="desc" value={inputData.desc} onChange={handleInputChange} errorContent={errors.desc} isRequired />
-                      <Input id="module-date" type="text" labelText="Tanggal Event" placeholder="Masukkan tanggal" name="tanggal" value={inputData.tanggal} onChange={handleInputChange} errorContent={errors.tanggal} isRequired />
+                      <Input id="module-desc" type="text" label="Deskripsi Modul" placeholder="Masukkan deskripsi" name="desc" value={inputData.desc} onChange={handleInputChange} errormsg={errors.desc} required />
+                      <Input id="module-date" type="text" label="Tanggal Event" placeholder="Masukkan tanggal" name="tanggal" value={inputData.tanggal} onChange={handleInputChange} errormsg={errors.tanggal} required />
                     </Fieldset>
                     <Fieldset>
-                      <Input id="module-hl" type="text" labelText="Highlight Modul" placeholder="Masukkan highlight" name="highlight" value={inputData.highlight} onChange={handleInputChange} errorContent={errors.highlight} isRequired />
-                      <Input id="module-info" type="text" labelText="Informasi Modul" placeholder="Masukkan informasi" name="info" value={inputData.info} onChange={handleInputChange} errorContent={errors.info} isRequired />
+                      <Input id="module-hl" type="text" label="Highlight Modul" placeholder="Masukkan highlight" name="highlight" value={inputData.highlight} onChange={handleInputChange} errormsg={errors.highlight} required />
+                      <Input id="module-info" type="text" label="Informasi Modul" placeholder="Masukkan informasi" name="info" value={inputData.info} onChange={handleInputChange} errormsg={errors.info} required />
                     </Fieldset>
-                    <Input id="module-syarat" variant="textarea" rows={10} labelText="Syarat & Ketentuan" placeholder="Masukkan syarat & ketentuan" name="syarat" value={inputData.syarat} onChange={handleInputChange} errorContent={errors.syarat} isRequired />
+                    <Textarea id="module-syarat" rows={10} label="Syarat & Ketentuan" placeholder="Masukkan syarat & ketentuan" name="syarat" value={inputData.syarat} onChange={handleInputChange} errormsg={errors.syarat} required />
                     <H1 color="var(--color-secondary)">2. Detail Modul</H1>
                     {moduleDetData.map((item, index) => (
                       <EventDetailCard key={index} title={item.judul} day={item.hari} date={item.tanggal} onEdit={() => openEventEdit(item.ideventdetail)} onDelete={() => handleDeleteEvent(item.ideventdetail)} />
@@ -698,21 +660,21 @@ const DashboardUpdatePage = () => {
                       <H1 color="var(--color-primary)" align="center">
                         {selectedState === "new" ? "Tambah Detail Event" : "Edit Detail Event"}
                       </H1>
-                      <Input id="detail-title" type="text" labelText="Judul Event" placeholder="Masukkan judul event" name="event_title" value={inputData.event_title} onChange={handleInputChange} errorContent={errors.event_title} isRequired />
-                      <Input id="detail-banner" variant="upload" labelText="Thumbnail Event" isPreview note="Rekomendasi ukuran: 1200 x 628 pixels" initialImage={inputData.event_image} onSelect={handleImageEvent} maxSize={5 * 1024 * 1024} isRequired />
+                      <Input id="detail-title" type="text" label="Judul Event" placeholder="Masukkan judul event" name="event_title" value={inputData.event_title} onChange={handleInputChange} errormsg={errors.event_title} required />
+                      <Input id="detail-banner" type="file" label="Thumbnail Event" initial={inputData.event_image} onChange={handleImageEvent} maxsize={5 * 1024 * 1024} required />
                       <Fieldset>
-                        <Input id="detail-day" type="text" labelText="Hari" placeholder="e.g. Sabtu" name="event_day" value={inputData.event_day} onChange={handleInputChange} errorContent={errors.event_day} isRequired />
-                        <Input id="detail-date" type="date" labelText="Tanggal" name="event_date" value={inputData.event_date} onChange={handleInputChange} errorContent={errors.event_date} isRequired />
+                        <Input id="detail-day" type="text" label="Hari" placeholder="e.g. Sabtu" name="event_day" value={inputData.event_day} onChange={handleInputChange} errormsg={errors.event_day} required />
+                        <Input id="detail-date" type="date" label="Tanggal" name="event_date" value={inputData.event_date} onChange={handleInputChange} errormsg={errors.event_date} required />
                       </Fieldset>
                       <Fieldset>
-                        <Input id="detail-info" type="text" labelText="Informasi Event" placeholder="Masukkan informasi event" name="event_info" value={inputData.event_info} onChange={handleInputChange} errorContent={errors.event_info} isRequired />
-                        <Input id="detail-cost" type="number" labelText="Biaya Event" placeholder="100000" name="event_cost" value={inputData.event_cost} onChange={handleInputChange} errorContent={errors.event_cost} isRequired />
+                        <Input id="detail-info" type="text" label="Informasi Event" placeholder="Masukkan informasi event" name="event_info" value={inputData.event_info} onChange={handleInputChange} errormsg={errors.event_info} required />
+                        <Input id="detail-cost" type="number" label="Biaya Event" placeholder="100000" name="event_cost" value={inputData.event_cost} onChange={handleInputChange} errormsg={errors.event_cost} required />
                       </Fieldset>
                       <Fieldset>
-                        <Input id="detail-loc" type="text" labelText="Lokasi Event" placeholder="Masukkan lokasi event" name="event_loc" value={inputData.event_loc} onChange={handleInputChange} errorContent={errors.event_loc} isRequired />
-                        <Input id="detail-coords" type="text" labelText="Titik Koordinat" placeholder="Masukkan titik koordinat" name="event_coords" value={inputData.event_coords} onChange={handleInputChange} errorContent={errors.event_coords} isRequired />
+                        <Input id="detail-loc" type="text" label="Lokasi Event" placeholder="Masukkan lokasi event" name="event_loc" value={inputData.event_loc} onChange={handleInputChange} errormsg={errors.event_loc} required />
+                        <Input id="detail-coords" type="text" label="Titik Koordinat" placeholder="Masukkan titik koordinat" name="event_coords" value={inputData.event_coords} onChange={handleInputChange} errormsg={errors.event_coords} required />
                       </Fieldset>
-                      <Input id="detail-guide" variant="textarea" rows={10} labelText="Panduan Event" placeholder="Masukkan panduan" name="event_guide" value={inputData.event_guide} onChange={handleInputChange} errorContent={errors.event_guide} isRequired />
+                      <Textarea id="detail-guide" rows={10} label="Panduan Event" placeholder="Masukkan panduan" name="event_guide" value={inputData.event_guide} onChange={handleInputChange} errormsg={errors.event_guide} required />
                       <EditorFooter>
                         <Button id="abort-action" type="button" variant="line" color="var(--color-primary)" buttonText="Batal" onClick={selectedState === "new" ? closeEventForm : closeEventEdit} />
                         <Button id="submit-action" type="submit" buttonText={selectedState === "new" ? "Tambah" : "Update"} isLoading={isSubmitting} />
@@ -735,10 +697,7 @@ const DashboardUpdatePage = () => {
     fetchAdditionalData();
   }, [uscope, uslug, params]);
 
-  if (userData.level !== "admin") {
-    <Navigate to="/" />;
-  }
-
+  if (userData.level !== "admin") return <Navigate to="/" />;
   return (
     <Fragment>
       <SEO title={`Update: ${pageTitle}`} route={`/dashboard/${uscope}/${uslug}/update/${params}`} isNoIndex />

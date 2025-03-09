@@ -9,6 +9,7 @@ import Page, { Container, Section } from "../components/layout/frames";
 const ErrorPage = () => {
   const navigate = useNavigate();
   const { H1, P } = useGraph();
+
   const id = "error-404-not-found";
 
   return (

@@ -24,11 +24,11 @@ const FooterMenuLi = ({ children, to }) => {
 };
 
 const Footer = ({ id }) => {
-  const compid = `${id}-bottom-navigation`;
-
   const [contacts, setContacts] = useState([]);
   const [staticPage, setStaticPage] = useState([]);
   const [socials, setSocials] = useState([]);
+
+  const compid = `${id}-bottom-navigation`;
 
   const fetchContacts = async () => {
     try {

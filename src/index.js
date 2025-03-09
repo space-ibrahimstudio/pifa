@@ -8,6 +8,7 @@ import { LoadingProvider } from "./components/feedback/loader";
 import { AuthProvider } from "./libs/guards/auth";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import "./index.css";
 
 const sendtoGA = ({ name, delta, id }) => {
@@ -30,7 +31,7 @@ root.render(
   <React.StrictMode>
     <HelmetProvider>
       <IbrahimStudioProvider>
-        <BrowserRouter>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <LoadingProvider>
             <ApiProvider>
               <AuthProvider>
@@ -49,3 +50,5 @@ if (process.env.NODE_ENV === "production") {
 } else {
   reportWebVitals(sendtoLog);
 }
+
+serviceWorkerRegistration.register();
