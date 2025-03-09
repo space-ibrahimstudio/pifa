@@ -34,14 +34,13 @@ const DashboardSlugPage = () => {
   const { inputSch, errorSch } = useInputSchema();
   const { H1, P } = useGraph();
   const { VGrid, VList, VPlus } = useIcons();
-  const id = `${short}-${scope}-${slug}`;
+
   const [limit, setLimit] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isDataShown, setIsDataShown] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isGenerating, setIsGenerating] = useState(false);
   const [selectedID, setSelectedID] = useState("");
   const [selectedMode, setSelectedMode] = useState("view");
   const [selectedView, setSelectedView] = useState("grid");
@@ -50,10 +49,8 @@ const DashboardSlugPage = () => {
   const [selectedCatType, setSelectedCatType] = useState("berita");
   const [pageTitle, setPageTitle] = useState("");
   const [draggingIndex, setDraggingIndex] = useState(null);
-
   const [inputData, setInputData] = useState({ ...inputSch });
   const [errors, setErrors] = useState({ ...errorSch });
-
   const [postData, setPostData] = useState([]);
   const [newsCatData, setNewsCatData] = useState([]);
   const [localCatData, setLocalCatData] = useState([]);
@@ -67,6 +64,7 @@ const DashboardSlugPage = () => {
   const [moduleData, setModuleData] = useState([]);
   const [bannerData, setBannerData] = useState([]);
 
+  const id = `${short}-${scope}-${slug}`;
   const daysOfWeek = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
@@ -112,9 +110,7 @@ const DashboardSlugPage = () => {
     if (file && file.type.startsWith("image/")) {
       const url = URL.createObjectURL(file);
       setSelectedImageUrl(url);
-    } else {
-      setSelectedImageUrl(null);
-    }
+    } else setSelectedImageUrl(null);
   };
 
   const fetchData = async () => {
@@ -273,9 +269,7 @@ const DashboardSlugPage = () => {
     const successmsg = "Selamat! Data baru berhasil ditambahkan.";
     const errormsg = "Terjadi kesalahan saat menambahkan data. Mohon periksa koneksi internet anda dan coba lagi.";
     const confirm = window.confirm(confirmmsg);
-    if (!confirm) {
-      return;
-    }
+    if (!confirm) return;
     setIsSubmitting(true);
     try {
       let submittedData;
@@ -303,9 +297,7 @@ const DashboardSlugPage = () => {
       }
       const formData = new FormData();
       formData.append("data", JSON.stringify(submittedData));
-      if (slug === "kategori" || slug === "module") {
-        formData.append("fileimg", selectedImage);
-      }
+      if (slug === "kategori" || slug === "module") formData.append("fileimg", selectedImage);
       await apiCrud(formData, sendpoint, endpoint);
       alert(successmsg);
       log("submitted data:", submittedData);
@@ -329,6 +321,7 @@ const DashboardSlugPage = () => {
               ["h1", "h2", "bold", "italic", "underline", "strikethrough", "ol", "ul"],
               ["link", "image", "video"],
             ];
+
             modeSwitcher = [
               { icon: <VList size="var(--pixel-20)" />, label: "Daftar Berita", onClick: () => setSelectedMode("view"), active: selectedMode === "view" },
               { icon: <VPlus size="var(--pixel-20)" />, label: "Tambah Berita", onClick: () => setSelectedMode("add"), active: selectedMode === "add" },
@@ -356,17 +349,12 @@ const DashboardSlugPage = () => {
             const handleTagSearch = (e) => {
               const value = e.target.value;
               setTagQuery(value);
-              if (value) {
-                fetchTagSuggests(value);
-              } else {
-                setTagSuggests([]);
-              }
+              if (value) fetchTagSuggests(value);
+              else setTagSuggests([]);
             };
 
             const handleAddTag = (tag) => {
-              if (!selectedTags.some((existingTag) => existingTag.tag === tag.nama_kategori_tag)) {
-                setSelectedTags([...selectedTags, { tag: tag.nama_kategori_tag }]);
-              }
+              if (!selectedTags.some((existingTag) => existingTag.tag === tag.nama_kategori_tag)) setSelectedTags([...selectedTags, { tag: tag.nama_kategori_tag }]);
               setTagQuery("");
               setTagSuggests([]);
             };
@@ -398,9 +386,7 @@ const DashboardSlugPage = () => {
               const successmsg = "Selamat! Data baru berhasil ditambahkan.";
               const errormsg = "Terjadi kesalahan saat menambahkan data. Mohon periksa koneksi internet anda dan coba lagi.";
               const confirm = window.confirm(confirmmsg);
-              if (!confirm) {
-                return;
-              }
+              if (!confirm) return;
               setIsSubmitting(true);
               try {
                 const base64Content = btoa(unescape(encodeURIComponent(`<div>${content}</div>`)));
@@ -418,32 +404,15 @@ const DashboardSlugPage = () => {
               }
             };
 
-            // const generateBlogPost = async () => {
-            //   setIsGenerating(true);
-            //   try {
-            //     const response = await axios.post("http://localhost:5000/api/generate", { title: inputData.judul }, { headers: { "Content-Type": "application/json" } });
-            //     console.log("Gemini response:", response);
-            //     setInitialContent(response.data.content);
-            //   } catch (error) {
-            //     console.error("Error generating blog post:", error);
-            //     setInitialContent("Failed to generate content.");
-            //   } finally {
-            //     setIsGenerating(false);
-            //   }
-            // };
-
             return (
               <Fragment>
                 <Header isasChild alignItems="center" gap="var(--pixel-15)">
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     Isi Berita
                   </H1>
-                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section overflow="unset" isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Section overflow="unset" isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
-                    {/* {selectedMode === "add" && <Button id="back-button" buttonText="Test AI" onClick={generateBlogPost} />} */}
-                    {/* {selectedMode === "view" && <Input id="limit-data" isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />} */}
                     <Input id="limit-data" isLabeled={false} variant="select" noEmptyValue baseColor="var(--color-secondlight)" placeholder="Baris per Halaman" value={limit} options={limitopt} onSelect={handleLimitChange} isReadonly={!isDataShown} isDisabled={selectedMode === "add"} />
                     {selectedMode === "view" && width >= 464 && <SwitchButton type="ico" buttons={viewSwitcher} />}
                   </Section>
@@ -454,8 +423,8 @@ const DashboardSlugPage = () => {
                     <Grid gridTemplateRows={selectedView === "grid" ? "unset" : "repeat(2, auto)"} gridTemplateColumns={selectedView === "grid" ? "repeat(auto-fill, minmax(var(--pixel-300), 1fr))" : "repeat(auto-fill, minmax(var(--pixel-350), 1fr))"} gap="var(--pixel-10)">
                       {postData.map((post, index) => (
                         <Fragment key={index}>
-                          {selectedView === "grid" && <NewsCard title={post.judul_berita} short={post.isi_berita} tag={`Views: ${post.counter}`} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/dashboard/${scope}/${slug}/update/${post.slug}`} onClick={() => navigate(`/dashboard/${scope}/${slug}/update/${post.slug}`)} />}
-                          {selectedView === "list" && <CatAdmCard title={post.judul_berita} short={stripHtml(post.isi_berita)} tag={`Views: ${post.counter}`} image={`${imgdomain}/images/img_berita/${post.img_berita}`} onEdit={() => navigate(`/dashboard/${scope}/${slug}/update/${post.slug}`)} />}
+                          {selectedView === "grid" && <NewsCard title={post.judul_berita} short={post.isi_berita} tag={`Views: ${post.counter}`} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/${scope}/${slug}/update/${post.slug}`} onClick={() => navigate(`/${scope}/${slug}/update/${post.slug}`)} />}
+                          {selectedView === "list" && <CatAdmCard title={post.judul_berita} short={stripHtml(post.isi_berita)} tag={`Views: ${post.counter}`} image={`${imgdomain}/images/img_berita/${post.img_berita}`} onEdit={() => navigate(`/${scope}/${slug}/update/${post.slug}`)} />}
                         </Fragment>
                       ))}
                     </Grid>
@@ -551,7 +520,6 @@ const DashboardSlugPage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     {selectedCatType === "berita" ? "Kategori Berita" : "Kategori Daerah"}
                   </H1>
-                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <SwitchButton buttons={switchCatType} />
@@ -565,7 +533,7 @@ const DashboardSlugPage = () => {
                         title={selectedCatType === "berita" ? item.nama_kategori_berita : item.nama_kategori_daerah}
                         short={item.desc}
                         image={`${imgdomain}/images/img_berita/${item.img}`}
-                        onEdit={() => navigate(`/dashboard/${scope}/${slug}/update/${item.slug}`)}
+                        onEdit={() => navigate(`/${scope}/${slug}/update/${item.slug}`)}
                         draggable={selectedCatType === "berita"}
                         onDragStart={selectedCatType === "berita" ? () => handleDragStart(index) : () => {}}
                         onDragOver={selectedCatType === "berita" ? (e) => handleDragOver(e, index) : () => {}}
@@ -624,17 +592,13 @@ const DashboardSlugPage = () => {
               const successmsg = action === "add" ? "Selamat! Data baru berhasil ditambahkan." : "Selamat! Perubahan data berhasil disimpan.";
               const errormsg = action === "add" ? "Terjadi kesalahan saat menambahkan data. Mohon periksa koneksi internet anda dan coba lagi." : "Terjadi kesalahan saat menyimpan perubahan. Mohon periksa koneksi internet anda dan coba lagi.";
               const confirm = window.confirm(confirmmsg);
-              if (!confirm) {
-                return;
-              }
+              if (!confirm) return;
               setIsSubmitting(true);
               try {
                 const submittedData = { secret: userData.token_activation, name: inputData.name };
                 const formData = new FormData();
                 formData.append("data", JSON.stringify(submittedData));
-                if (action === "update") {
-                  formData.append("idedit", selectedID);
-                }
+                if (action === "update") formData.append("idedit", selectedID);
                 await apiCrud(formData, "office", "cudtags");
                 alert(successmsg);
                 log("submitted data:", submittedData);
@@ -654,9 +618,7 @@ const DashboardSlugPage = () => {
               const successmsg = "Selamat! Data terpilih berhasil dihapus.";
               const errormsg = "Terjadi kesalahan saat menghapus data. Mohon periksa koneksi internet anda dan coba lagi.";
               const confirm = window.confirm(confirmmsg);
-              if (!confirm) {
-                return;
-              }
+              if (!confirm) return;
               setIsSubmitting(true);
               try {
                 const submittedData = { secret: userData.token_activation, name: "" };
@@ -682,7 +644,6 @@ const DashboardSlugPage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     Tag Berita
                   </H1>
-                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section overflow="unset" isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Section overflow="unset" isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
@@ -730,9 +691,7 @@ const DashboardSlugPage = () => {
               const successmsg = "Selamat! Banner terpilih berhasil dihapus.";
               const errormsg = "Terjadi kesalahan saat menghapus banner. Mohon periksa koneksi internet anda dan coba lagi.";
               const confirm = window.confirm(confirmmsg);
-              if (!confirm) {
-                return;
-              }
+              if (!confirm) return;
               setIsSubmitting(true);
               try {
                 const submittedData = { secret: userData.token_activation, status: "1" };
@@ -752,10 +711,7 @@ const DashboardSlugPage = () => {
               }
             };
 
-            const handleBDragStart = (index) => {
-              setDraggingIndex(index);
-            };
-
+            const handleBDragStart = (index) => setDraggingIndex(index);
             const handleBDragOver = (e, hoverIndex) => {
               e.preventDefault();
               if (draggingIndex === hoverIndex) return;
@@ -787,7 +743,6 @@ const DashboardSlugPage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     Banner Berita
                   </H1>
-                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section gap="var(--pixel-10)">
                   {bannerData
@@ -821,7 +776,6 @@ const DashboardSlugPage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     Modul Event
                   </H1>
-                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section overflow="unset" isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Section overflow="unset" isWrap alignItems="center" justifyContent="center" gap="var(--pixel-10)">
@@ -835,8 +789,8 @@ const DashboardSlugPage = () => {
                     <Grid gridTemplateRows={selectedView === "grid" ? "unset" : "repeat(2, auto)"} gridTemplateColumns={selectedView === "grid" ? "repeat(auto-fill, minmax(var(--pixel-300), 1fr))" : "repeat(auto-fill, minmax(var(--pixel-350), 1fr))"} gap="var(--pixel-10)">
                       {moduleData.map((post, index) => (
                         <Fragment key={index}>
-                          {selectedView === "grid" && <NewsCard title={post.title} short={`${post.descripiton} | ${post.highlight}`} image={`${imgdomain}/images/event/${post.img}`} loc={post.info} date={post.tanggal} slug={`/dashboard/${scope}/${slug}/update/${post.idevent}`} onClick={() => navigate(`/dashboard/${scope}/${slug}/update/${post.idevent}`)} />}
-                          {selectedView === "list" && <CatAdmCard title={post.title} short={post.descripiton} image={`${imgdomain}/images/event/${post.img}`} onEdit={() => navigate(`/dashboard/${scope}/${slug}/update/${post.idevent}`)} />}
+                          {selectedView === "grid" && <NewsCard title={post.title} short={`${post.descripiton} | ${post.highlight}`} image={`${imgdomain}/images/event/${post.img}`} loc={post.info} date={post.tanggal} slug={`/${scope}/${slug}/update/${post.idevent}`} onClick={() => navigate(`/${scope}/${slug}/update/${post.idevent}`)} />}
+                          {selectedView === "list" && <CatAdmCard title={post.title} short={post.descripiton} image={`${imgdomain}/images/event/${post.img}`} onEdit={() => navigate(`/${scope}/${slug}/update/${post.idevent}`)} />}
                         </Fragment>
                       ))}
                     </Grid>
@@ -875,9 +829,7 @@ const DashboardSlugPage = () => {
   };
 
   useEffect(() => {
-    if (width < 464) {
-      setSelectedView("list");
-    }
+    if (width < 464) setSelectedView("list");
   }, [width]);
 
   useEffect(() => {
@@ -892,13 +844,10 @@ const DashboardSlugPage = () => {
     fetchAdditionalData();
   }, [scope]);
 
-  if (userData.level !== "admin") {
-    <Navigate to="/404-not-found" />;
-  }
-
+  if (userData.level !== "admin") return <Navigate to="/404-not-found" />;
   return (
     <Fragment>
-      <SEO title={pageTitle} route={`/dashboard/${scope}/${slug}`} isNoIndex />
+      <SEO title={pageTitle} route={`/${scope}/${slug}`} isNoIndex />
       <Page pageid={id} type="private">
         <Container alignItems="center" minHeight="80vh" gap="var(--pixel-20)">
           {renderContent()}

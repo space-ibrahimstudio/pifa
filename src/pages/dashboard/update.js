@@ -29,7 +29,7 @@ const DashboardUpdatePage = () => {
   const { inputSch, errorSch } = useInputSchema();
   const { H1, P } = useGraph();
   const { Arrow, Trash } = useIcons();
-  const id = `${short}-${params}`;
+
   const [isFetching, setIsFetching] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -41,10 +41,8 @@ const DashboardUpdatePage = () => {
   const [selectedID, setSelectedID] = useState("");
   const [selectedSlug, setSelectedSlug] = useState("");
   const [pageTitle, setPageTitle] = useState("");
-
   const [inputData, setInputData] = useState({ ...inputSch });
   const [errors, setErrors] = useState({ ...errorSch });
-
   const [newsCatData, setNewsCatData] = useState([]);
   const [localCatData, setLocalCatData] = useState([]);
   const [localeDate, setLocaleDate] = useState("");
@@ -55,6 +53,7 @@ const DashboardUpdatePage = () => {
   const [selectedCatType, setSelectedCatType] = useState("berita");
   const [moduleDetData, setModuleDetData] = useState([]);
 
+  const id = `${short}-${params}`;
   const daysOfWeek = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
   const monthsObj = { Januari: "01", Februari: "02", Maret: "03", April: "04", Mei: "05", Juni: "06", Juli: "07", Agustus: "08", September: "09", Oktober: "10", November: "11", Desember: "12" };
@@ -120,16 +119,10 @@ const DashboardUpdatePage = () => {
               addtFormData.append("data", JSON.stringify({ secret: userData.token_activation, kategori: "daerah" }));
               const beritares = await apiRead(formData, "office", "viewcategory");
               const daerahres = await apiRead(addtFormData, "office", "viewcategory");
-              if (beritares && beritares.data && beritares.data.length > 0) {
-                beritadata = beritares.data;
-              } else {
-                beritadata = [];
-              }
-              if (daerahres && daerahres.data && daerahres.data.length > 0) {
-                daerahdata = daerahres.data;
-              } else {
-                daerahdata = [];
-              }
+              if (beritares && beritares.data && beritares.data.length > 0) beritadata = beritares.data;
+              else beritadata = [];
+              if (daerahres && daerahres.data && daerahres.data.length > 0) daerahdata = daerahres.data;
+              else daerahdata = [];
               mergeddata = [...beritadata, ...daerahdata];
               const categorydata = mergeddata.find((item) => item.slug === params);
               if (categorydata) {
@@ -227,41 +220,28 @@ const DashboardUpdatePage = () => {
     if (file && file.type.startsWith("image/")) {
       const url = URL.createObjectURL(file);
       setSelectedImageUrl(url);
-    } else {
-      setSelectedImageUrl(null);
-    }
+    } else setSelectedImageUrl(null);
   };
 
   const handleTagSearch = (e) => {
     const value = e.target.value;
     setTagQuery(value);
-    if (value) {
-      fetchTagSuggests(value);
-    } else {
-      setTagSuggests([]);
-    }
+    if (value) fetchTagSuggests(value);
+    else setTagSuggests([]);
   };
 
   const handleAddTag = (tag) => {
-    if (!selectedTags.some((existingTag) => existingTag.tag === tag.nama_kategori_tag)) {
-      setSelectedTags([...selectedTags, { tag: tag.nama_kategori_tag }]);
-    }
+    if (!selectedTags.some((existingTag) => existingTag.tag === tag.nama_kategori_tag)) setSelectedTags([...selectedTags, { tag: tag.nama_kategori_tag }]);
     setTagQuery("");
     setTagSuggests([]);
   };
 
-  const handleRemoveTag = (tagToRemove) => {
-    setSelectedTags(selectedTags.filter((tag) => tag.tag !== tagToRemove));
-  };
-
+  const handleRemoveTag = (tagToRemove) => setSelectedTags(selectedTags.filter((tag) => tag.tag !== tagToRemove));
   const switchData = async (params) => {
     setSelectedData(params);
     const currentData = (arraydata, identifier) => {
-      if (typeof identifier === "string") {
-        return arraydata.find((item) => getNestedValue(item, identifier) === params);
-      } else {
-        return arraydata.find((item) => item[identifier] === params);
-      }
+      if (typeof identifier === "string") return arraydata.find((item) => getNestedValue(item, identifier) === params);
+      else return arraydata.find((item) => item[identifier] === params);
     };
     const errormsg = `Terjadi kesalahan saat memuat data. Mohon periksa koneksi internet anda dan coba lagi.`;
     let switchedData;
@@ -323,9 +303,7 @@ const DashboardUpdatePage = () => {
     const successmsg = "Selamat! Perubahan data berhasil disimpan.";
     const errormsg = "Terjadi kesalahan saat menyimpan perubahan. Mohon periksa koneksi internet anda dan coba lagi.";
     const confirm = window.confirm(confirmmsg);
-    if (!confirm) {
-      return;
-    }
+    if (!confirm) return;
     setIsSubmitting(true);
     try {
       let submittedData;
@@ -373,9 +351,7 @@ const DashboardUpdatePage = () => {
     const successmsg = "Selamat! Data terpilih berhasil dihapus.";
     const errormsg = "Terjadi kesalahan saat menghapus data. Mohon periksa koneksi internet anda dan coba lagi.";
     const confirm = window.confirm(confirmmsg);
-    if (!confirm) {
-      return;
-    }
+    if (!confirm) return;
     setIsSubmitting(true);
     try {
       let submittedData;
@@ -412,9 +388,7 @@ const DashboardUpdatePage = () => {
       }
       const formData = new FormData();
       formData.append("data", JSON.stringify(submittedData));
-      if (uslug === "kategori" || uslug === "module") {
-        formData.append("iddel", selectedID);
-      }
+      if (uslug === "kategori" || uslug === "module") formData.append("iddel", selectedID);
       await apiCrud(formData, sendpoint, endpoint);
       alert(successmsg);
       log("submitted data:", submittedData);
@@ -452,9 +426,7 @@ const DashboardUpdatePage = () => {
               const successmsg = "Selamat! Perubahan data berhasil disimpan.";
               const errormsg = "Terjadi kesalahan saat menyimpan perubahan. Mohon periksa koneksi internet anda dan coba lagi.";
               const confirm = window.confirm(confirmmsg);
-              if (!confirm) {
-                return;
-              }
+              if (!confirm) return;
               setIsSubmitting(true);
               try {
                 const base64Content = btoa(unescape(encodeURIComponent(`<div>${content}</div>`)));
@@ -534,7 +506,6 @@ const DashboardUpdatePage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     {selectedCatType === "berita" ? "Kategori Berita" : "Kategori Daerah"}
                   </H1>
-                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Button id="back-button" buttonText="Kembali" onClick={() => navigate(-1)} startContent={<Arrow size="var(--pixel-25)" direction="left" />} />
@@ -600,26 +571,19 @@ const DashboardUpdatePage = () => {
               const successmsg = selectedState === "exist" ? "Selamat! Perubahan data berhasil disimpan." : "Selamat! Data baru berhasil ditambahkan.";
               const errormsg = selectedState === "exist" ? "Terjadi kesalahan saat menyimpan perubahan. Mohon periksa koneksi internet anda dan coba lagi." : "Terjadi kesalahan saat menambahkan data. Mohon periksa koneksi internet anda dan coba lagi.";
               const confirm = window.confirm(confirmmsg);
-              if (!confirm) {
-                return;
-              }
+              if (!confirm) return;
               setIsSubmitting(true);
               try {
                 const submittedData = { secret: userData.token_activation, idevent: selectedID, judul: inputData.event_title, hari: inputData.event_day, info: inputData.event_info, biaya: inputData.event_cost, tanggal: inputData.event_date, alamat: inputData.event_loc, koordinat: inputData.event_coords, panduan: inputData.event_guide, slug: selectedSlug };
                 const formData = new FormData();
                 formData.append("data", JSON.stringify(submittedData));
-                if (selectedState === "exist") {
-                  formData.append("idedit", selectedData);
-                }
+                if (selectedState === "exist") formData.append("idedit", selectedData);
                 formData.append("fileimg", selectedImg);
                 await apiCrud(formData, "event", "cudeventdetail");
                 alert(successmsg);
                 log("submitted data:", submittedData);
-                if (selectedState === "exist") {
-                  closeEventEdit();
-                } else {
-                  closeEventForm();
-                }
+                if (selectedState === "exist") closeEventEdit();
+                else closeEventForm();
                 await fetchData();
                 await fetchAdditionalData();
               } catch (error) {
@@ -635,9 +599,7 @@ const DashboardUpdatePage = () => {
               const successmsg = "Selamat! Data terpilih berhasil dihapus.";
               const errormsg = "Terjadi kesalahan saat menghapus data. Mohon periksa koneksi internet anda dan coba lagi.";
               const confirm = window.confirm(confirmmsg);
-              if (!confirm) {
-                return;
-              }
+              if (!confirm) return;
               setIsSubmitting(true);
               try {
                 const submittedData = { secret: userData.token_activation, idevent: "", judul: "", hari: "", info: "", biaya: "", tanggal: "", alamat: "", koordinat: "", panduan: "", slug: "" };
@@ -663,7 +625,6 @@ const DashboardUpdatePage = () => {
                   <H1 size="lg" color="var(--color-primary)" align="center">
                     Modul Event
                   </H1>
-                  {/* <P align="center">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut lectus dui. Nullam vulputate commodo euismod.</P> */}
                 </Header>
                 <Section isWrap alignItems="center" justifyContent="space-between" gap="var(--pixel-10) var(--pixel-10)" margin="0">
                   <Button id="back-button" buttonText="Kembali" onClick={() => navigate(-1)} startContent={<Arrow size="var(--pixel-25)" direction="left" />} />
@@ -735,13 +696,10 @@ const DashboardUpdatePage = () => {
     fetchAdditionalData();
   }, [uscope, uslug, params]);
 
-  if (userData.level !== "admin") {
-    <Navigate to="/" />;
-  }
-
+  if (userData.level !== "admin") return <Navigate to="/" />;
   return (
     <Fragment>
-      <SEO title={`Update: ${pageTitle}`} route={`/dashboard/${uscope}/${uslug}/update/${params}`} isNoIndex />
+      <SEO title={`Update: ${pageTitle}`} route={`/${uscope}/${uslug}/update/${params}`} isNoIndex />
       <Page pageid={id} type="private">
         <Container alignItems="center" minHeight="80vh" gap="var(--pixel-20)">
           {renderContent()}

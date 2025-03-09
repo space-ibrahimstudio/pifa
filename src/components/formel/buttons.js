@@ -101,7 +101,7 @@ const TabButton = ({ id, text, path, type = "single", subTabData = [], startCont
       {subTabOpen && subTabData.length > 0 && (
         <section className={tabcss.tabSub}>
           {subTabData.map((item, index) => (
-            <Link key={index} className={tabcss.tabSubButton} to={`/dashboard/${path}/${toPathname(item.submenu)}`}>
+            <Link key={index} className={tabcss.tabSubButton} to={`/${path}/${toPathname(item.submenu)}`}>
               <b className={tabcss.tabSubButtonText}>{toTitleCase(item.submenu)}</b>
             </Link>
           ))}

@@ -1,15 +1,13 @@
-name: PIFA v0.1.0 (push || cron)
+name: PIFA PANEL v0.1.0 (push || cron)
 
 on:
   push:
     branches:
-      - main
-    workflow_run:
-      if: github.actor != 'github-actions[bot]'
+      - admin
 
 jobs:
   web-deploy:
-    name: Deploy on Main
+    name: Deploy on Panel
     runs-on: ubuntu-latest
 
     strategy:
@@ -48,8 +46,7 @@ jobs:
           sudo lsof -i tcp:45678 | grep LISTEN | awk '{print $2}' | xargs sudo kill -9 || true
 
       - name: 7. Builds the app for production
-        # run: CI= npm run spagen
-        run: CI= npm run stagen
+        run: CI= npm run spagen
 
       - name: 8. List output files
         run: find build/ -print
@@ -66,38 +63,3 @@ jobs:
             **/.git*/**
             **/node_modules/**
             **/berita/**
-
-      - name: 10. Sync "berita" folder
-        uses: SamKirkland/FTP-Deploy-Action@4.3.3
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME_MAIN }}
-          password: ${{ secrets.FTP_PASSWORD_MAIN }}
-          local-dir: build/berita/
-          server-dir: berita/
-
-      - name: 11. Remove FTP sync state file
-        run: |
-          echo "open ${{ secrets.FTP_HOST }}" >> ftp_commands_async.txt
-          echo "user ${{ secrets.FTP_USERNAME_MAIN }} ${{ secrets.FTP_PASSWORD_MAIN }}" >> ftp_commands_async.txt
-
-          echo "delete 404.html" >> ftp_commands_async.txt
-          echo "delete 200.html" >> ftp_commands_async.txt
-          echo "cd /berita" >> ftp_commands_async.txt
-          echo "delete .ftp-deploy-sync-state.json" >> ftp_commands_async.txt
-          echo "bye" >> ftp_commands_async.txt
-
-          ftp -inv < ftp_commands_async.txt
-
-      - name: 12. Commit and push updated sitemap.xml
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          if git diff --quiet public/sitemap.xml; then
-            echo "No changes detected in sitemap.xml. Skipping commit."
-          else
-            git add public/sitemap.xml
-            git commit -m "Update sitemap.xml from GitHub Actions"
-            git push origin main
-          fi
