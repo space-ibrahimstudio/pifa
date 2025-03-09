@@ -13,6 +13,7 @@ import Slider from "../components/layout/slider";
 import Img, { AdBanner } from "../components/media/image";
 
 const imgdomain = process.env.REACT_APP_API_URL;
+const subid = process.env.REACT_APP_DOMAIN_SUB_ID;
 
 const InsightPage = () => {
   const navigate = useNavigate();
@@ -52,7 +53,11 @@ const InsightPage = () => {
     try {
       switch (islug) {
         case "terbaru":
-          response = await apiRead(formData, "main", "latestnew");
+          const subFormData = new FormData();
+          subFormData.append("limit", newLimit);
+          subFormData.append("hal", "0");
+          subFormData.append("idcat", subid);
+          response = await apiRead(subFormData, "main", "sublatestnew");
           if (response && response.data && response.data.length > 0) {
             data = response.data;
             setPageData(data);

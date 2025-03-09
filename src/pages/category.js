@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useWindow } from "@ibrahimstudio/react";
 import useApi from "../libs/plugins/apis";
 import { useDocument } from "../libs/plugins/helpers";
-import AdSense from "../libs/plugins/adsense";
 import { SEO } from "../libs/plugins/seo";
 import useLoading from "../components/feedback/loader";
 import useGraph from "../components/content/graph";
@@ -16,6 +15,7 @@ import { NewsSummaryGroup, FeedsGroup } from "../components/layout/groups";
 import { TagsButton } from "../components/formel/buttons";
 
 const imgdomain = process.env.REACT_APP_API_URL;
+const subid = process.env.REACT_APP_DOMAIN_SUB_ID;
 
 const CategoryPage = () => {
   const navigate = useNavigate();
@@ -89,11 +89,12 @@ const CategoryPage = () => {
   const fetchLatestPosts = async (idcat) => {
     setLoading(true);
     const formData = new FormData();
-    formData.append("idcat", idcat);
     formData.append("limit", "3");
     formData.append("hal", "0");
+    formData.append("idcat", subid);
+    formData.append("idberita", idcat);
     try {
-      const postsdata = await apiRead(formData, "main", "categorynew");
+      const postsdata = await apiRead(formData, "main", "sublatestnew");
       setLatestPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
       console.error("error fetching latest posts:", error);
@@ -244,7 +245,6 @@ const CategoryPage = () => {
           </FeedsGroup>
           <Section flex="1" direction="column" alignItems="center" minWidth="var(--pixel-300)" maxWidth={width >= 464 ? "var(--pixel-400)" : "unset"} gap="var(--pixel-10)">
             <Img style={{ borderRadius: "var(--pixel-20)", width: "100%", height: "auto", flexShrink: "0" }} alt="Explore Berbagai Konten Hiburan" src="/img/inline-ads.webp" />
-            {/* <AdSense /> */}
           </Section>
         </Container>
         <Container alignItems="center" gap="var(--pixel-10)">

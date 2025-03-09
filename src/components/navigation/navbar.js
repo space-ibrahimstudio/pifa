@@ -1,21 +1,17 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useWindow, useContent } from "@ibrahimstudio/react";
+import { useWindow } from "@ibrahimstudio/react";
 import { Button } from "@ibrahimstudio/button";
 import { Input } from "@ibrahimstudio/input";
 import { ISHome, ISSearch } from "@ibrahimstudio/icons";
 import useApi from "../../libs/plugins/apis";
-import useAuth from "../../libs/guards/auth";
-import { toPathname } from "../../libs/plugins/helpers";
 import useIcons from "../content/icons";
 import TabButton, { TabButtonGen } from "../formel/buttons";
 import styles from "./styles/navbar.module.css";
 
 const Navbar = ({ id, parentType = "public" }) => {
   const navigate = useNavigate();
-  const { apiGet, apiRead } = useApi();
-  const { toTitleCase } = useContent();
-  const { isLoggedin, logout, userData } = useAuth();
+  const { apiGet } = useApi();
   const { width } = useWindow();
   const { Close } = useIcons();
 
@@ -25,9 +21,7 @@ const Navbar = ({ id, parentType = "public" }) => {
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [publicMenus, setPublicMenus] = useState([]);
-  const [privateMenus, setPrivateMenus] = useState([]);
 
-  const handleLogout = () => logout();
   const handleSearch = (e) => {
     if (e.key === "Enter") navigate(`/pencarian/${query}`);
   };
@@ -41,21 +35,8 @@ const Navbar = ({ id, parentType = "public" }) => {
     }
   };
 
-  const getPrivateMenus = async () => {
-    const formData = new FormData();
-    const { token_activation, level } = userData;
-    formData.append("data", JSON.stringify({ secret: token_activation, level: level.toUpperCase() }));
-    try {
-      const privatemenus = await apiRead(formData, "office", "viewmenu");
-      setPrivateMenus(privatemenus && privatemenus.data && privatemenus.data.length > 0 ? privatemenus.data : []);
-    } catch (error) {
-      console.error("error:", error);
-    }
-  };
-
   useEffect(() => {
-    if (parentType === "private") getPrivateMenus();
-    else getPublicMenus();
+    getPublicMenus();
   }, [parentType]);
 
   useEffect(() => {
@@ -73,8 +54,7 @@ const Navbar = ({ id, parentType = "public" }) => {
       <section className={styles.navTop}>
         <img className={styles.navLogoIcon} alt="" src="/png/pifa-logo.png" />
         <div className={styles.navOption}>
-          <Button id={`${compid}-action`} variant="line" color="var(--color-primary)" size="sm" buttonText={isLoggedin ? (userData.level === "admin" ? "Dashboard" : "Posting Iklan") : "Beriklan Disini"} onClick={isLoggedin ? (userData.level === "admin" ? () => navigate("/dashboard") : () => alert("Add Post coming soon!")) : () => navigate("/login")} />
-          {isLoggedin ? <Button id={`${compid}-logout`} size="sm" buttonText="Keluar" onClick={handleLogout} /> : <Button id={`${compid}-login`} size="sm" buttonText="Login" onClick={() => navigate("/login")} />}
+          <Button id={`${compid}-login`} size="sm" buttonText="Login" onClick={() => {}} />
         </div>
       </section>
       <section className={`${styles.navBottom} ${parentType === "private" ? "" : styles.pub}`}>
@@ -87,19 +67,9 @@ const Navbar = ({ id, parentType = "public" }) => {
             <TabButtonGen id={`${compid}-beranda`} text="Beranda" path="/" startContent={<ISHome />} />
             <div className={`${styles.navMenuHscroll} ${parentType === "private" ? "" : styles.pub}`}>
               <div className={styles.navMenuItems}>
-                {parentType === "private" ? (
-                  <Fragment>
-                    {privateMenus.map((menu, index) => (
-                      <TabButton key={index} type="sub" id={`${compid}-${menu["Menu Utama"].idmenu}`} path={toPathname(menu["Menu Utama"].menu)} text={toTitleCase(menu["Menu Utama"].menu)} subTabData={menu["Sub Menu"]} />
-                    ))}
-                  </Fragment>
-                ) : (
-                  <Fragment>
-                    {publicMenus.map((menu, index) => (
-                      <TabButton key={index} id={`${compid}-${menu.slug}`} path={`/berita/kategori/${menu.slug}`} text={menu.nama_kategori_berita} />
-                    ))}
-                  </Fragment>
-                )}
+                {publicMenus.map((menu, index) => (
+                  <TabButton key={index} id={`${compid}-${menu.slug}`} path={`/berita/kategori/${menu.slug}`} text={menu.nama_kategori_berita} />
+                ))}
               </div>
             </div>
           </nav>
