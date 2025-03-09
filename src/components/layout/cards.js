@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useRef } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useContent, useFormat } from "@ibrahimstudio/react";
 import { Button } from "@ibrahimstudio/button";
 import { Input } from "@ibrahimstudio/input";
@@ -6,11 +6,39 @@ import { useDocument, stripHtml, toPathname } from "../../libs/plugins/helpers";
 import useIcons from "../content/icons";
 import A from "../feedback/anchor";
 import { NewsTag } from "../feedback/markers";
+import imgcss from "./styles/image-card.module.css";
 import newcss from "./styles/news-card.module.css";
 import cadcss from "./styles/cat-admin-card.module.css";
 import ogscss from "./styles/og-card.module.css";
 import tagcss from "./styles/tag-card.module.css";
 import bancss from "./styles/banner-card.module.css";
+
+export const ImageCard = ({ alt, src }) => {
+  const compid = (alt && `Pifa image ${toPathname(alt)}`) || "Pifa image";
+  const crdcss = { position: "absolute", top: "0", left: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", zIndex: "0" };
+
+  const [imageSrc, setImageSrc] = useState("");
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(false);
+    const img = new Image();
+    img.src = src;
+    img.onload = () => {
+      setImageSrc(img.src);
+      setIsLoaded(true);
+    };
+
+    img.onerror = () => setImageSrc("/img/fallback.jpg");
+  }, [src]);
+
+  return (
+    <Fragment>
+      {!isLoaded && <div id={`${compid}-placeholder`} className={imgcss.skeleton} />}
+      <img id={compid} alt={`Foto: ${alt} | Pifa Net`} src={imageSrc} style={{ ...crdcss, opacity: isLoaded ? 1 : 0, transition: "opacity 0.5s" }} onLoad={() => setIsLoaded(true)} />
+    </Fragment>
+  );
+};
 
 export const BannerCard = ({ type, src, isUploading, onUpload, onDelete, draggable = false, onDragStart, onDragOver, onDrop }) => {
   const ref = useRef(null);
