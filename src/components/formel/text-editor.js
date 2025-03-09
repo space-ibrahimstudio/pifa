@@ -26,15 +26,6 @@ const ToolButton = ({ id, isActive, children, onClick }) => {
           }
         } else return child;
       })}
-      {/* {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (frag_child) => (React.isValidElement(frag_child) ? React.cloneElement(frag_child, { id: compid }) : frag_child))}</Fragment>;
-          }
-          return React.cloneElement(child, { id: compid });
-        }
-        return child;
-      })} */}
     </button>
   );
 };
@@ -60,15 +51,6 @@ const ToolGroup = ({ id, children }) => {
           }
         } else return child;
       })}
-      {/* {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (frag_child) => (React.isValidElement(frag_child) ? React.cloneElement(frag_child, { id: compid }) : frag_child))}</Fragment>;
-          }
-          return React.cloneElement(child, { id: compid });
-        }
-        return child;
-      })} */}
     </section>
   );
 };
@@ -256,15 +238,6 @@ export const EditorFooter = ({ id, children }) => {
           }
         } else return child;
       })}
-      {/* {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (frag_child) => (React.isValidElement(frag_child) ? React.cloneElement(frag_child, { id: compid }) : frag_child))}</Fragment>;
-          }
-          return React.cloneElement(child, { id: compid });
-        }
-        return child;
-      })} */}
     </footer>
   );
 };
@@ -466,15 +439,6 @@ const TextEditor = ({ id, children, minW = "unset", maxW = "unset", initialConte
           }
         } else return child;
       })}
-      {/* {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          if (child.type === Fragment) {
-            return <Fragment>{React.Children.map(child.props.children, (frag_child) => (React.isValidElement(frag_child) ? React.cloneElement(frag_child, { id: compid, editorRef, formatText, toggleHeading, activeFormats, insertImage, insertVideo, insertLink, handleInput, handlePaste }) : frag_child))}</Fragment>;
-          }
-          return React.cloneElement(child, { id: compid, editorRef, formatText, toggleHeading, activeFormats, insertImage, insertVideo, insertLink, handleInput, handlePaste });
-        }
-        return child;
-      })} */}
     </form>
   );
 };

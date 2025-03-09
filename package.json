@@ -17,22 +17,9 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.4",
-    "react-jss": "^10.10.0",
     "react-router-dom": "^6.23.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4",
-    "workbox-background-sync": "^6.6.0",
-    "workbox-broadcast-update": "^6.6.0",
-    "workbox-cacheable-response": "^6.6.0",
-    "workbox-core": "^6.6.0",
-    "workbox-expiration": "^6.6.0",
-    "workbox-google-analytics": "^6.6.1",
-    "workbox-navigation-preload": "^6.6.0",
-    "workbox-precaching": "^6.6.0",
-    "workbox-range-requests": "^6.6.0",
-    "workbox-routing": "^6.6.0",
-    "workbox-strategies": "^6.6.0",
-    "workbox-streams": "^6.6.0",
     "xml2js": "^0.6.2"
   },
   "scripts": {
@@ -41,9 +28,7 @@
     "backup": "rimraf backup && node src/libs/scripts/backup.js",
     "rstore": "node src/libs/scripts/restore.js",
     "clean": "npm run backup && rimraf build",
-    "crawl": "node update-slugs.js",
-    "spagen": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
-    "stagen": "npm run spagen && react-snap"
+    "spagen": "cross-env GENERATE_SOURCEMAP=false react-scripts build"
   },
   "eslintConfig": {
     "extends": [
@@ -66,34 +51,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "cross-env": "^7.0.3",
-    "puppeteer": "^22.13.1",
-    "react-snap": "^1.23.0",
     "rimraf": "^5.0.5",
     "shelljs": "^0.8.5"
-  },
-  "reactSnap": {
-    "userAgent": "IbrahimStudio",
-    "asyncScriptTags": true,
-    "puppeteerArgs": [
-      "--no-sandbox",
-      "--disable-setuid-sandbox"
-    ],
-    "crawl": true,
-    "include": [
-      "/",
-      "/login",
-      "/informasi",
-      "/informasi/syarat-ketentuan",
-      "/informasi/tentang-pifa",
-      "/informasi/kebijakan-privasi",
-      "/informasi/faq",
-      "/informasi/kode-etik-jurnalistik",
-      "/informasi/pasang-iklan",
-      "/informasi/pedoman-media-siber"
-    ],
-    "minifyHtml": {
-      "collapseWhitespace": true,
-      "removeComments": true
-    }
   }
 }

@@ -5,7 +5,6 @@ import { toPathname } from "../../libs/plugins/helpers";
 import useIcons from "../content/icons";
 import tabcss from "./styles/tab-button.module.css";
 import tbgcss from "./styles/tab-button-gen.module.css";
-import srccss from "./styles/source-button.module.css";
 import tagcss from "./styles/tags-button.module.css";
 import swtcss from "./styles/switch-button.module.css";
 
@@ -36,21 +35,6 @@ export const TagsButton = ({ id, text, type = "reg", onClick }) => {
         {text}
       </b>
       {type === "select" && <Close size="var(--pixel-20)" onClick={onClick} />}
-    </button>
-  );
-};
-
-export const SourceButton = ({ id, to }) => {
-  const compid = `${id}-view-source`;
-  const navigate = useNavigate();
-  const handleClick = () => navigate(to);
-
-  return (
-    <button id={compid} className={srccss.groupCta} onClick={handleClick}>
-      <b id={`${compid}-text`} className={srccss.groupCtaText}>
-        Selengkapnya
-      </b>
-      <img id={`${compid}-icon`} className={srccss.groupCtaIcon} alt="View More" src="/svg/arrow-right.svg" />
     </button>
   );
 };
