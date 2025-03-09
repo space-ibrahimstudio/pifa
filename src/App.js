@@ -32,8 +32,6 @@ function App() {
       <Route path="/berita/tag/:slug" element={<TagPage />} />
       <Route path="/pencarian/:query" element={<SearchPage />} />
       <Route path="/login" element={isLoggedin ? <Navigate to="/dashboard" replace /> : <LoginPage />} />
-      <Route path="/dashboard/:scope/:slug" element={isLoggedin ? <DashboardSlugPage /> : <Navigate to="/login" replace />} />
-      <Route path="/dashboard/:uscope/:uslug/update/:params" element={isLoggedin ? <DashboardUpdatePage /> : <Navigate to="/login" replace />} />
       {/* no-index redirect */}
       <Route path="/informasi" element={<Navigate to="/informasi/pedoman-media-siber" replace />} />
       <Route path="/berita" element={<Navigate to="/berita/insight/trending" replace />} />
@@ -46,7 +44,6 @@ function App() {
       <Route path="/help" element={<Navigate to="/informasi/faq" replace />} />
       <Route path="/bantuan" element={<Navigate to="/informasi/faq" replace />} />
       <Route path="/masuk" element={<Navigate to="/login" replace />} />
-      <Route path="/dashboard" element={isLoggedin ? <Navigate to="/dashboard/berita/isi-berita" replace /> : <Navigate to="/login" replace />} />
     </Routes>
   );
 }
