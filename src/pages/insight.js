@@ -12,9 +12,7 @@ import { NewsFeedCard } from "../components/layout/cards";
 import Slider from "../components/layout/slider";
 import Img, { AdBanner } from "../components/media/image";
 
-const imgdomain = process.env.REACT_APP_API_URL;
-
-const InsightPage = () => {
+const InsightPage = ({ imgdomain }) => {
   const navigate = useNavigate();
   const { islug } = useParams();
   const { short } = useDocument();

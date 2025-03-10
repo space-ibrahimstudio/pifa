@@ -14,9 +14,7 @@ import NewsCard, { NewsDisplayCard, NewsFeedCard } from "../components/layout/ca
 import { NewsSummaryGroup, FeedsGroup } from "../components/layout/groups";
 import { TagsButton } from "../components/formel/buttons";
 
-const imgdomain = process.env.REACT_APP_API_URL;
-
-const CategoryPage = () => {
+const CategoryPage = ({ imgdomain }) => {
   const navigate = useNavigate();
   const { category } = useParams();
   const { short } = useDocument();

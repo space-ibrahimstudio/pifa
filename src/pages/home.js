@@ -13,9 +13,7 @@ import { NewsSummaryGroup, News3Group, SectionGroup } from "../components/layout
 import Slider from "../components/layout/slider";
 import { AdBanner } from "../components/media/image";
 
-const imgdomain = process.env.REACT_APP_API_URL;
-
-const HomePage = () => {
+const HomePage = ({ imgdomain }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { width } = useWindow();

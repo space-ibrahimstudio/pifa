@@ -15,9 +15,7 @@ import NewsCard from "../components/layout/cards";
 import SectionHead from "../components/feedback/markers";
 import { NewsSummaryGroup } from "../components/layout/groups";
 
-const imgdomain = process.env.REACT_APP_API_URL;
-
-const PostPage = () => {
+const PostPage = ({ imgdomain }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { slug } = useParams();

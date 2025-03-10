@@ -12,9 +12,7 @@ import { TagsButton } from "../components/formel/buttons";
 import { FeedsGroup } from "../components/layout/groups";
 import { NewsFeedCard } from "../components/layout/cards";
 
-const imgdomain = process.env.REACT_APP_API_URL;
-
-const SearchPage = () => {
+const SearchPage = ({ imgdomain }) => {
   const navigate = useNavigate();
   const { query } = useParams();
   const { width } = useWindow();
