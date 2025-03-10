@@ -9,20 +9,16 @@ jobs:
     name: Render Static Site
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [20.12.1]
-
     steps:
       - name: 1. Get latest code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.client_payload.branch || 'main' }}
 
-      - name: 2. Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@master
+      - name: 2. Use Node.js v20.12.1
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20.12.1
 
       - name: 3. Export environment variables
         run: |

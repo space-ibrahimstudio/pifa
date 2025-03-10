@@ -42,7 +42,7 @@ async function fetchPostSlug() {
   const formData = new FormData();
   try {
     formData.append("limit", "1000");
-    formData.append("hal", "5000");
+    formData.append("hal", "6000");
     const url = `${apiURL}/authapi/viewnews`;
     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
     const slugdata = response.data;

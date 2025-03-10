@@ -4,26 +4,20 @@ on:
   push:
     branches:
       - main
-    workflow_run:
-      if: github.actor != 'github-actions[bot]'
 
 jobs:
   web-deploy:
     name: Deploy on Main
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [20.12.1]
-
     steps:
       - name: 1. Get latest code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: 2. Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@master
+      - name: 2. Use Node.js v20.12.1
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20.12.1
 
       - name: 3. Export environment variables
         run: |
@@ -87,6 +81,7 @@ jobs:
           echo "bye" >> ftp_commands_async.txt
 
           ftp -inv < ftp_commands_async.txt
+          rm ftp_commands_async.txt
 
       - name: 12. Commit and push updated sitemap.xml
         run: |
