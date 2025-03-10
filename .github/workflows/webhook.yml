@@ -84,6 +84,7 @@ jobs:
           echo "bye" >> ftp_commands_async.txt
 
           ftp -inv < ftp_commands_async.txt
+          rm ftp_commands_async.txt
 
       - name: 12. Commit and push updated sitemap.xml
         run: |
