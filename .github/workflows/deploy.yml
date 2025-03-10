@@ -1,4 +1,4 @@
-name: PIFA AREA v0.1.0 (push || cron)
+name: PIFA v0.1.0 (push || cron)
 
 on:
   push:
@@ -28,11 +28,12 @@ jobs:
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
 
   web-deploy:
-    name: Deploy on Sub
+    name: Deploy on Area
     needs: fetch-categories
     runs-on: ubuntu-latest
 
     strategy:
+      # max-parallel: 2
       matrix:
         category: ${{ fromJson(needs.fetch-categories.outputs.matrix) }}
 
@@ -95,5 +96,5 @@ jobs:
           else
             git add public/sitemap.xml
             git commit -m "Update sitemap.xml from GitHub Actions"
-            git push origin sub
+            git push origin area
           fi

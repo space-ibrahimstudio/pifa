@@ -1,4 +1,4 @@
-name: PIFA AREA v0.1.0 (hook)
+name: PIFA v0.1.0 (hook)
 
 on:
   repository_dispatch:
@@ -32,6 +32,7 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      # max-parallel: 2
       matrix:
         category: ${{ fromJson(needs.fetch-categories.outputs.matrix) }}
 
@@ -62,5 +63,5 @@ jobs:
           else
             git add public/sitemap.xml
             git commit -m "Update sitemap.xml from GitHub Actions"
-            git push origin main
+            git push origin area
           fi
