@@ -12,9 +12,7 @@ import { TagsButton } from "../components/formel/buttons";
 import { FeedsGroup } from "../components/layout/groups";
 import { NewsFeedCard } from "../components/layout/cards";
 
-const imgdomain = process.env.REACT_APP_API_URL;
-
-const TagPage = () => {
+const TagPage = ({ imgdomain }) => {
   const navigate = useNavigate();
   const { slug } = useParams();
   const { short } = useDocument();

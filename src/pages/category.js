@@ -14,9 +14,7 @@ import NewsCard, { NewsDisplayCard, NewsFeedCard } from "../components/layout/ca
 import { NewsSummaryGroup, FeedsGroup } from "../components/layout/groups";
 import { TagsButton } from "../components/formel/buttons";
 
-const imgdomain = process.env.REACT_APP_API_URL;
-
-const CategoryPage = () => {
+const CategoryPage = ({ imgdomain, subid }) => {
   const navigate = useNavigate();
   const { category } = useParams();
   const { short } = useDocument();
@@ -88,11 +86,12 @@ const CategoryPage = () => {
   const fetchLatestPosts = async (idcat) => {
     setLoading(true);
     const formData = new FormData();
-    formData.append("idcat", idcat);
     formData.append("limit", "3");
     formData.append("hal", "0");
+    formData.append("idcat", subid);
+    formData.append("idberita", idcat);
     try {
-      const postsdata = await apiRead(formData, "main", "categorynew");
+      const postsdata = await apiRead(formData, "main", "sublatestnew");
       setLatestPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
       console.error("error fetching latest posts:", error);
@@ -112,7 +111,12 @@ const CategoryPage = () => {
     try {
       switch (postsFilter) {
         case "latest":
-          data = await apiRead(formData, "main", "categorynew");
+          const areaFormData = new FormData();
+          areaFormData.append("limit", newLimit);
+          areaFormData.append("hal", "0");
+          areaFormData.append("idcat", subid);
+          areaFormData.append("idberita", idcat);
+          data = await apiRead(areaFormData, "main", "sublatestnew");
           setFeedPostData(data && data.data && data.data.length > 0 ? data.data : []);
           break;
         case "hot":

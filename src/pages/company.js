@@ -12,9 +12,7 @@ import Article from "../components/content/article";
 import Img, { AdBanner } from "../components/media/image";
 import { CompanyGroup } from "../components/layout/groups";
 
-const imgdomain = process.env.REACT_APP_API_URL;
-
-const CompanyPage = () => {
+const CompanyPage = ({ imgdomain }) => {
   const { cslug } = useParams();
   const { short } = useDocument();
   const { width } = useWindow();

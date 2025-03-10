@@ -6,7 +6,7 @@ const moment = require("moment");
 const packageJson = require("./package.json");
 if (!process.env.CI) require("dotenv").config({ path: ".env.development" });
 
-const domainURL = process.env.REACT_APP_DOMAIN_MAIN;
+const domainURL = process.env.REACT_APP_DOMAIN_SUB;
 const apiURL = process.env.REACT_APP_API_URL;
 
 async function fetchCatSlug() {
@@ -22,28 +22,12 @@ async function fetchCatSlug() {
   }
 }
 
-// async function fetchPostSlug() {
-//   const formData = new FormData();
-//   formData.append("limit", "20");
-//   formData.append("hal", "0");
-//   try {
-//     const url = `${apiURL}/main/latestnew`;
-//     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
-//     const slugdata = response.data;
-//     if (!slugdata.error) return slugdata.data;
-//     else return [];
-//   } catch (error) {
-//     console.error("Error fetching post slugs:", error);
-//     process.exit(1);
-//   }
-// }
-
 async function fetchPostSlug() {
   const formData = new FormData();
+  formData.append("limit", "20");
+  formData.append("hal", "0");
   try {
-    formData.append("limit", "1000");
-    formData.append("hal", "5000");
-    const url = `${apiURL}/authapi/viewnews`;
+    const url = `${apiURL}/main/latestnew`;
     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
     const slugdata = response.data;
     if (!slugdata.error) return slugdata.data;
@@ -54,10 +38,25 @@ async function fetchPostSlug() {
   }
 }
 
+// async function fetchPostSlug() {
+//   const formData = new FormData();
+//   try {
+//     formData.append("limit", "500");
+//     formData.append("hal", "0");
+//     const url = `${apiURL}/authapi/viewnews`;
+//     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
+//     const slugdata = response.data;
+//     if (!slugdata.error) return slugdata.data;
+//     else return [];
+//   } catch (error) {
+//     console.error("Error fetching post slugs:", error);
+//     process.exit(1);
+//   }
+// }
+
 async function updatePackageJson(catslugs, postslugs) {
   const updatedInclude = [
     "/",
-    "/login",
     "/informasi",
     "/informasi/syarat-ketentuan",
     "/informasi/tentang-pifa",
@@ -101,7 +100,6 @@ async function generateSitemap(catslugs, postslugs) {
 
   const staticUrls = [
     { loc: "/", changefreq: "daily", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
-    { loc: "/login", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
     { loc: "/informasi/syarat-ketentuan", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
     { loc: "/informasi/tentang-pifa", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },
     { loc: "/informasi/kebijakan-privasi", changefreq: "monthly", lastmod: moment().format("YYYY-MM-DD"), priority: 1.0 },

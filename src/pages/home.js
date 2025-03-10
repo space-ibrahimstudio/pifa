@@ -13,9 +13,7 @@ import { NewsSummaryGroup, News3Group, SectionGroup } from "../components/layout
 import Slider from "../components/layout/slider";
 import { AdBanner } from "../components/media/image";
 
-const imgdomain = process.env.REACT_APP_API_URL;
-
-const HomePage = () => {
+const HomePage = ({ imgdomain, subid }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { width } = useWindow();
@@ -94,8 +92,9 @@ const HomePage = () => {
     const formData = new FormData();
     formData.append("limit", "3");
     formData.append("hal", "0");
+    formData.append("idcat", subid);
     try {
-      const postsdata = await apiRead(formData, "main", "latestnew");
+      const postsdata = await apiRead(formData, "main", "sublatestnew");
       setLatestPostData(postsdata && postsdata.data && postsdata.data.length > 0 ? postsdata.data : []);
     } catch (error) {
       console.error("error fetching latest posts:", error);

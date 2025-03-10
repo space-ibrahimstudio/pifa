@@ -12,9 +12,7 @@ import { NewsFeedCard } from "../components/layout/cards";
 import Slider from "../components/layout/slider";
 import Img, { AdBanner } from "../components/media/image";
 
-const imgdomain = process.env.REACT_APP_API_URL;
-
-const InsightPage = () => {
+const InsightPage = ({ imgdomain, subid }) => {
   const navigate = useNavigate();
   const { islug } = useParams();
   const { short } = useDocument();
@@ -52,7 +50,11 @@ const InsightPage = () => {
     try {
       switch (islug) {
         case "terbaru":
-          response = await apiRead(formData, "main", "latestnew");
+          const areaFormData = new FormData();
+          areaFormData.append("limit", newLimit);
+          areaFormData.append("hal", "0");
+          areaFormData.append("idcat", subid);
+          response = await apiRead(areaFormData, "main", "sublatestnew");
           if (response && response.data && response.data.length > 0) {
             data = response.data;
             setPageData(data);

@@ -112,9 +112,10 @@ export const useInputSchema = () => {
 };
 
 export const useDocument = () => {
-  const company = "Pifa Net";
-  const short = "pifa";
-  const domain = process.env.REACT_APP_DOMAIN_MAIN;
+  const name = process.env.REACT_APP_DOMAIN_SUB_NAME;
+  const company = `Pifa ${name}`;
+  const short = `pifa-${toPathname(name)}`;
+  const domain = process.env.REACT_APP_DOMAIN_SUB;
 
   return { company, short, domain };
 };

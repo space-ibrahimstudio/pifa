@@ -12,7 +12,8 @@ const FallbackPage = ({ from = "/home", to = "/" }) => {
   const id = `${short}-redirect-${from}-to-${to}`;
   const isCrawl = typeof window !== "undefined" && window.navigator.userAgent === "IbrahimStudio";
 
-  return isCrawl ? (
+  if (!isCrawl) return <Navigate to={to} />;
+  return (
     <Fragment>
       <SEO title="Redirecting you ..." route={from} isNoIndex />
       <Page pageid={id} isFullscreen>
@@ -26,8 +27,6 @@ const FallbackPage = ({ from = "/home", to = "/" }) => {
         </Container>
       </Page>
     </Fragment>
-  ) : (
-    <Navigate to={to} />
   );
 };
 
