@@ -26,8 +26,8 @@ const sendtoLog = ({ name, delta, id }) => {
   console.log(`[DEV] ${name}:`, { id, delta });
 };
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
+const rootElement = document.getElementById("root");
+const AppBundled = (
   <React.StrictMode>
     <HelmetProvider>
       <IbrahimStudioProvider>
@@ -45,10 +45,32 @@ root.render(
   </React.StrictMode>
 );
 
-if (process.env.NODE_ENV === "production") {
-  reportWebVitals(sendtoGA);
-} else {
-  reportWebVitals(sendtoLog);
+if (rootElement.hasChildNodes()) ReactDOM.hydrateRoot(rootElement, AppBundled);
+else {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(AppBundled);
 }
+
+// const root = ReactDOM.createRoot(document.getElementById("root"));
+// root.render(
+//   <React.StrictMode>
+//     <HelmetProvider>
+//       <IbrahimStudioProvider>
+//         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+//           <LoadingProvider>
+//             <ApiProvider>
+//               <AuthProvider>
+//                 <App />
+//               </AuthProvider>
+//             </ApiProvider>
+//           </LoadingProvider>
+//         </BrowserRouter>
+//       </IbrahimStudioProvider>
+//     </HelmetProvider>
+//   </React.StrictMode>
+// );
+
+if (process.env.NODE_ENV === "production") reportWebVitals(sendtoGA);
+else reportWebVitals(sendtoLog);
 
 serviceWorkerRegistration.unregister();
