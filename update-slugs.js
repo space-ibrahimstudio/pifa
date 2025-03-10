@@ -8,6 +8,7 @@ if (!process.env.CI) require("dotenv").config({ path: ".env.development" });
 
 const domainURL = process.env.REACT_APP_DOMAIN_MAIN;
 const apiURL = process.env.REACT_APP_API_URL;
+const pagereq = process.env.REACT_APP_PAGE_REQ;
 
 async function fetchCatSlug() {
   try {
@@ -41,8 +42,8 @@ async function fetchCatSlug() {
 async function fetchPostSlug() {
   const formData = new FormData();
   try {
-    formData.append("limit", "10");
-    formData.append("hal", "0");
+    formData.append("limit", "1000");
+    formData.append("hal", pagereq);
     const url = `${apiURL}/authapi/viewnews`;
     const response = await axios.post(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
     const slugdata = response.data;

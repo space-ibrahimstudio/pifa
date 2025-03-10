@@ -7,8 +7,13 @@ on:
 
 jobs:
   web-deploy:
-    name: Deploy on Main
+    name: Deploy on Main (batch ${{ matrix.page }})
     runs-on: ubuntu-latest
+
+    strategy:
+      max-parallel: 1
+      matrix:
+        page: [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000]
 
     steps:
       - name: 1. Get latest code
@@ -36,6 +41,7 @@ jobs:
         env:
           REACT_APP_DOMAIN_MAIN: ${{ secrets.REACT_APP_DOMAIN_MAIN }}
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+          REACT_APP_PAGE_REQ: ${{ matrix.page }}
 
       - name: 6. Kill any process using port 45678
         run: |
