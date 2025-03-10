@@ -27,31 +27,38 @@
   "scope": "/",
   "shortcuts": [
     {
-      "name": "Berita Terbaru hari ini di Pifa Net",
-      "short_name": "Pifa Net: Terbaru",
+      "name": "Master - Kategori",
+      "short_name": "Kategori",
       "description": "Dapatkan informasi Terbaru seputar Teknologi, Lifestyle, Bola, dan lainnya hari ini, ekslusif hanya di Pifa Net",
-      "url": "/berita/insight/terbaru",
+      "url": "/master/kategori",
       "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Berita Terpopuler hari ini di Pifa Net",
-      "short_name": "Pifa Net: Terpopuler",
+      "name": "Master - Tags",
+      "short_name": "Tags",
       "description": "Dapatkan informasi Terpopuler seputar Teknologi, Lifestyle, Bola, dan lainnya hari ini, ekslusif hanya di Pifa Net",
-      "url": "/berita/insight/populer",
+      "url": "/master/tags",
       "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Berita Trending hari ini di Pifa Net",
-      "short_name": "Pifa Net: Trending",
+      "name": "Master - Banner",
+      "short_name": "Banner",
       "description": "Dapatkan informasi Trending seputar Teknologi, Lifestyle, Bola, dan lainnya hari ini, ekslusif hanya di Pifa Net",
-      "url": "/berita/insight/trending",
+      "url": "/master/banner",
       "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Berita Rekomendasi hari ini di Pifa Net",
-      "short_name": "Pifa Net: Rekomendasi",
+      "name": "Berita - Isi Berita",
+      "short_name": "Isi Berita",
       "description": "Dapatkan informasi Rekomendasi seputar Teknologi, Lifestyle, Bola, dan lainnya hari ini, ekslusif hanya di Pifa Net",
-      "url": "/berita/insight/rekomendasi",
+      "url": "/berita/isi-berita",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Event - Module",
+      "short_name": "Module",
+      "description": "Dapatkan informasi Rekomendasi seputar Teknologi, Lifestyle, Bola, dan lainnya hari ini, ekslusif hanya di Pifa Net",
+      "url": "/event/module",
       "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
     }
   ],
