@@ -6,7 +6,7 @@ const moment = require("moment");
 const packageJson = require("./package.json");
 if (!process.env.CI) require("dotenv").config({ path: ".env.development" });
 
-const domainURL = process.env.REACT_APP_DOMAIN_SUB;
+const domainURL = process.env.REACT_APP_DOMAIN_AREA;
 const apiURL = process.env.REACT_APP_API_URL;
 
 async function fetchCatSlug() {

@@ -12,7 +12,7 @@ import TagPage from "./pages/tag";
 import SearchPage from "./pages/search";
 
 const imgdomain = process.env.REACT_APP_API_URL;
-const subid = process.env.REACT_APP_DOMAIN_SUB_ID;
+const subid = process.env.REACT_APP_DOMAIN_AREA_ID;
 
 function App() {
   const location = useLocation();

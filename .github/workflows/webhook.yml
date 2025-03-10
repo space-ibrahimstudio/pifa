@@ -50,7 +50,7 @@ jobs:
       - name: 3. Generate latest sitemap
         run: node update-slugs.js
         env:
-          REACT_APP_DOMAIN_SUB: https://${{ matrix.category.name }}.pifa.co.id
+          REACT_APP_DOMAIN_AREA: https://${{ matrix.category.name }}.pifa.co.id
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
       - name: 4. Commit and push updated sitemap.xml

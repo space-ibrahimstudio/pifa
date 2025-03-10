@@ -1,6 +1,6 @@
 import React from "react";
 
-const hostname = process.env.REACT_APP_DOMAIN_SUB;
+const hostname = process.env.REACT_APP_DOMAIN_AREA;
 
 const A = ({ type = "int", slug = "/", link = hostname }) => {
   const isCrawl = typeof window !== "undefined" && window.navigator.userAgent === "IbrahimStudio";

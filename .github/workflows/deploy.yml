@@ -50,10 +50,10 @@ jobs:
         run: |
           echo "REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}" >> $GITHUB_ENV
           echo "REACT_APP_MARKERS=${{ secrets.REACT_APP_MARKERS }}" >> $GITHUB_ENV
-          echo "REACT_APP_DOMAIN_SUB=https://${{ matrix.category.name }}.pifa.co.id" >> $GITHUB_ENV
-          echo "REACT_APP_DOMAIN_SUB_NAME=${{ matrix.category.title }}" >> $GITHUB_ENV
-          echo "REACT_APP_DOMAIN_SUB_ID=${{ matrix.category.id }}" >> $GITHUB_ENV
-          echo "REACT_APP_GTAG_SUB=${{ secrets[format('GTAG_{0}', matrix.category.uppername)] }}" >> $GITHUB_ENV
+          echo "REACT_APP_DOMAIN_AREA=https://${{ matrix.category.name }}.pifa.co.id" >> $GITHUB_ENV
+          echo "REACT_APP_DOMAIN_AREA_NAME=${{ matrix.category.title }}" >> $GITHUB_ENV
+          echo "REACT_APP_DOMAIN_AREA_ID=${{ matrix.category.id }}" >> $GITHUB_ENV
+          echo "REACT_APP_GTAG_AREA=${{ secrets[format('GTAG_{0}', matrix.category.uppername)] }}" >> $GITHUB_ENV
 
       - name: 4. Installing required packages
         run: npm install
@@ -61,7 +61,7 @@ jobs:
       - name: 5. Generate latest sitemap
         run: node update-slugs.js
         env:
-          REACT_APP_DOMAIN_SUB: https://${{ matrix.category.name }}.pifa.co.id
+          REACT_APP_DOMAIN_AREA: https://${{ matrix.category.name }}.pifa.co.id
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
       - name: 6. Replace placeholders in manifest.json
