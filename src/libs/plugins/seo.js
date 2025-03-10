@@ -3,11 +3,11 @@ import { Helmet } from "react-helmet-async";
 import { useDocument, formatToISO8601, stripHtml } from "./helpers";
 
 export function SEO({ title, description, route, thumbSrc, extThumbSrc, thumbAlt = "", isPost = false, author = "Admin", datecreate = "2021-07-01 12:06:53", dateupdate = "2021-07-01 12:06:53", category, isNoIndex = false }) {
-  const { company, domain } = useDocument();
+  const { company, exactdomain } = useDocument();
 
   const metatitle = `${title} | ${company}`;
   const stripdesc = (description && stripHtml(description).substring(0, 160)) || "Platform Informasi Terkini dan Teraktual, Kanal Aspirasi Netizen, dan Digital Market";
-  const thumbnail = extThumbSrc ? extThumbSrc : thumbSrc ? `${domain}${thumbSrc}` : `${domain}/capture-wide.png`;
+  const thumbnail = extThumbSrc ? extThumbSrc : thumbSrc ? `${exactdomain}${thumbSrc}` : `${exactdomain}/capture-wide.png`;
   const markers = process.env.REACT_APP_MARKERS;
   const pubdate = formatToISO8601(datecreate);
   const moddate = formatToISO8601(dateupdate);
@@ -28,8 +28,8 @@ export function SEO({ title, description, route, thumbSrc, extThumbSrc, thumbAlt
     "@context": "http://schema.org",
     "@type": "NewsMediaOrganization",
     name: company,
-    logo: `${domain}/logo192.png`,
-    url: domain,
+    logo: `${exactdomain}/logo192.png`,
+    url: exactdomain,
     address: { "@type": "PostalAddress", addressLocality: "Pontianak", addressRegion: "Kalimantan Barat", addressCountry: "Indonesia" },
   };
 
@@ -40,7 +40,7 @@ export function SEO({ title, description, route, thumbSrc, extThumbSrc, thumbAlt
       <meta property="og:description" content={stripdesc} />
       <meta property="og:image" content={thumbnail} />
       <meta property="og:image:alt" content={thumbAlt === "" ? stripdesc : thumbAlt} />
-      <meta property="og:url" content={`${domain}${route}`} />
+      <meta property="og:url" content={`${exactdomain}${route}`} />
       <meta property="og:type" content={isPost ? "article" : "website"} />
       {isPost && <meta property="article:author" content={author} />}
       {isPost && <meta property="article:published_time" content={pubdate} />}
@@ -53,7 +53,7 @@ export function SEO({ title, description, route, thumbSrc, extThumbSrc, thumbAlt
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="author" content={markers} />
       <meta name="robots" content={isNoIndex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
-      <link rel="canonical" href={`${domain}${route}`} />
+      <link rel="canonical" href={`${exactdomain}${route}`} />
       <script type="application/ld+json">{isPost ? JSON.stringify(blogLD) : JSON.stringify(orgzLD)}</script>
     </Helmet>
   );

@@ -1,13 +1,12 @@
 import React, { Fragment } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@ibrahimstudio/button";
 import { ISHome } from "@ibrahimstudio/icons";
 import useGraph from "../components/content/graph";
+import { openLink } from "../libs/plugins/helpers";
 import { SEO } from "../libs/plugins/seo";
 import Page, { Container, Section } from "../components/layout/frames";
 
 const ErrorPage = () => {
-  const navigate = useNavigate();
   const { H1, P } = useGraph();
 
   const id = "error-404-not-found";
@@ -99,7 +98,7 @@ const ErrorPage = () => {
             </H1>
             <P align="center">Mungkin kamu menuliskan URL yang tidak valid, atau halaman yang kamu tuju telah dialihkan.</P>
           </Section>
-          <Button id="back" buttonText="Kembali ke Beranda" onClick={() => navigate("/")} startContent={<ISHome />} />
+          <Button id="back" buttonText="Kembali ke Beranda" onClick={() => openLink({ url: "https://pifa.co.id" })} startContent={<ISHome />} />
         </Container>
       </Page>
     </Fragment>

@@ -20,9 +20,7 @@ import Form from "../../components/formel/form";
 import useIcons from "../../components/content/icons";
 import NewsCard, { CatAdmCard, OGCard, TagCard, BannerCard } from "../../components/layout/cards";
 
-const imgdomain = process.env.REACT_APP_API_URL;
-
-const DashboardSlugPage = () => {
+const DashboardSlugPage = ({ imgdomain }) => {
   const { scope, slug } = useParams();
   const navigate = useNavigate();
   const draggedItemIndex = useRef();
@@ -421,8 +419,8 @@ const DashboardSlugPage = () => {
                     <Grid gridTemplateRows={selectedView === "grid" ? "unset" : "repeat(2, auto)"} gridTemplateColumns={selectedView === "grid" ? "repeat(auto-fill, minmax(var(--pixel-300), 1fr))" : "repeat(auto-fill, minmax(var(--pixel-350), 1fr))"} gap="var(--pixel-10)">
                       {postData.map((post, index) => (
                         <Fragment key={index}>
-                          {selectedView === "grid" && <NewsCard title={post.judul_berita} short={post.isi_berita} tag={`Views: ${post.counter}`} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/dashboard/${scope}/${slug}/update/${post.slug}`} onClick={() => navigate(`/dashboard/${scope}/${slug}/update/${post.slug}`)} />}
-                          {selectedView === "list" && <CatAdmCard title={post.judul_berita} short={stripHtml(post.isi_berita)} tag={`Views: ${post.counter}`} image={`${imgdomain}/images/img_berita/${post.img_berita}`} onEdit={() => navigate(`/dashboard/${scope}/${slug}/update/${post.slug}`)} />}
+                          {selectedView === "grid" && <NewsCard title={post.judul_berita} short={post.isi_berita} tag={`Views: ${post.counter}`} image={`${imgdomain}/images/img_berita/${post.img_berita}`} loc={post.penulis_berita} date={post.tanggal_berita} slug={`/${scope}/${slug}/update/${post.slug}`} onClick={() => navigate(`/${scope}/${slug}/update/${post.slug}`)} />}
+                          {selectedView === "list" && <CatAdmCard title={post.judul_berita} short={stripHtml(post.isi_berita)} tag={`Views: ${post.counter}`} image={`${imgdomain}/images/img_berita/${post.img_berita}`} onEdit={() => navigate(`/${scope}/${slug}/update/${post.slug}`)} />}
                         </Fragment>
                       ))}
                     </Grid>
@@ -531,7 +529,7 @@ const DashboardSlugPage = () => {
                         title={selectedCatType === "berita" ? item.nama_kategori_berita : item.nama_kategori_daerah}
                         short={item.desc}
                         image={`${imgdomain}/images/img_berita/${item.img}`}
-                        onEdit={() => navigate(`/dashboard/${scope}/${slug}/update/${item.slug}`)}
+                        onEdit={() => navigate(`/${scope}/${slug}/update/${item.slug}`)}
                         draggable={selectedCatType === "berita"}
                         onDragStart={selectedCatType === "berita" ? () => handleDragStart(index) : () => {}}
                         onDragOver={selectedCatType === "berita" ? (e) => handleDragOver(e, index) : () => {}}
@@ -787,8 +785,8 @@ const DashboardSlugPage = () => {
                     <Grid gridTemplateRows={selectedView === "grid" ? "unset" : "repeat(2, auto)"} gridTemplateColumns={selectedView === "grid" ? "repeat(auto-fill, minmax(var(--pixel-300), 1fr))" : "repeat(auto-fill, minmax(var(--pixel-350), 1fr))"} gap="var(--pixel-10)">
                       {moduleData.map((post, index) => (
                         <Fragment key={index}>
-                          {selectedView === "grid" && <NewsCard title={post.title} short={`${post.descripiton} | ${post.highlight}`} image={`${imgdomain}/images/event/${post.img}`} loc={post.info} date={post.tanggal} slug={`/dashboard/${scope}/${slug}/update/${post.idevent}`} onClick={() => navigate(`/dashboard/${scope}/${slug}/update/${post.idevent}`)} />}
-                          {selectedView === "list" && <CatAdmCard title={post.title} short={post.descripiton} image={`${imgdomain}/images/event/${post.img}`} onEdit={() => navigate(`/dashboard/${scope}/${slug}/update/${post.idevent}`)} />}
+                          {selectedView === "grid" && <NewsCard title={post.title} short={`${post.descripiton} | ${post.highlight}`} image={`${imgdomain}/images/event/${post.img}`} loc={post.info} date={post.tanggal} slug={`/${scope}/${slug}/update/${post.idevent}`} onClick={() => navigate(`/${scope}/${slug}/update/${post.idevent}`)} />}
+                          {selectedView === "list" && <CatAdmCard title={post.title} short={post.descripiton} image={`${imgdomain}/images/event/${post.img}`} onEdit={() => navigate(`/${scope}/${slug}/update/${post.idevent}`)} />}
                         </Fragment>
                       ))}
                     </Grid>
@@ -845,8 +843,8 @@ const DashboardSlugPage = () => {
   if (userData.level !== "admin") return <Navigate to="/404-not-found" />;
   return (
     <Fragment>
-      <SEO title={pageTitle} route={`/dashboard/${scope}/${slug}`} isNoIndex />
-      <Page pageid={id} type="private">
+      <SEO title={pageTitle} route={`/${scope}/${slug}`} isNoIndex />
+      <Page pageid={id}>
         <Container alignItems="center" minHeight="80vh" gap="var(--pixel-20)">
           {renderContent()}
         </Container>

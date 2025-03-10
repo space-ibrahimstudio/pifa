@@ -2,6 +2,7 @@
   "name": "pifa",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/dashboard",
   "dependencies": {
     "@ibrahimstudio/button": "^1.3.0",
     "@ibrahimstudio/icons": "^1.0.10",

@@ -19,9 +19,7 @@ import PopOver from "../../components/layout/popover";
 import { OGCard, EventDetailCard } from "../../components/layout/cards";
 import useIcons from "../../components/content/icons";
 
-const imgdomain = process.env.REACT_APP_API_URL;
-
-const DashboardUpdatePage = () => {
+const DashboardUpdatePage = ({ imgdomain }) => {
   const { uscope, uslug, params } = useParams();
   const navigate = useNavigate();
   const { log } = useDevmode();
@@ -29,7 +27,7 @@ const DashboardUpdatePage = () => {
   const { apiRead, apiGet, apiCrud } = useApi();
   const { short } = useDocument();
   const { inputSch, errorSch } = useInputSchema();
-  const { H1, P } = useGraph();
+  const { H1 } = useGraph();
   const { Arrow, Trash } = useIcons();
 
   const [isFetching, setIsFetching] = useState(false);
@@ -514,7 +512,7 @@ const DashboardUpdatePage = () => {
                 </Section>
                 <Section isWrap gap="var(--pixel-10)">
                   <Form minW="var(--pixel-350)" onSubmit={selectedCatType === "berita" ? (e) => handleSubmit(e, "cudcatberita") : (e) => handleSubmit(e, "cudcatdaerah")}>
-                    <Input id="cat-image" type="file" accept="image/*" label="Thumbnail (og:image)" initial={inputData.image} onChange={handleImageSelect} required />
+                    <Input id="cat-image" type="file" accept="image/*" label="Thumbnail (og:image)" placeholder="Pilih thumbnail" initial={inputData.image} onChange={handleImageSelect} required />
                     <Input id="cat-title" type="text" label="Judul (og:title)" placeholder="Masukkan judul kategori" name="judul" value={inputData.judul} onChange={handleInputChange} errormsg={errors.judul} required />
                     <Input id="cat-desc" type="text" label="Deskripsi (og:description)" placeholder="Masukkan deskripsi kategori" name="desc" value={inputData.desc} onChange={handleInputChange} errormsg={errors.desc} required />
                     <EditorFooter>
@@ -700,7 +698,7 @@ const DashboardUpdatePage = () => {
   if (userData.level !== "admin") return <Navigate to="/" />;
   return (
     <Fragment>
-      <SEO title={`Update: ${pageTitle}`} route={`/dashboard/${uscope}/${uslug}/update/${params}`} isNoIndex />
+      <SEO title={`Update: ${pageTitle}`} route={`/${uscope}/${uslug}/update/${params}`} isNoIndex />
       <Page pageid={id} type="private">
         <Container alignItems="center" minHeight="80vh" gap="var(--pixel-20)">
           {renderContent()}

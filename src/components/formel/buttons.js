@@ -5,7 +5,6 @@ import { toPathname } from "../../libs/plugins/helpers";
 import useIcons from "../content/icons";
 import tabcss from "./styles/tab-button.module.css";
 import tbgcss from "./styles/tab-button-gen.module.css";
-import srccss from "./styles/source-button.module.css";
 import tagcss from "./styles/tags-button.module.css";
 import swtcss from "./styles/switch-button.module.css";
 
@@ -41,23 +40,7 @@ export const TagsButton = ({ id, text, type = "reg", onClick }) => {
   );
 };
 
-export const SourceButton = ({ id, to }) => {
-  const navigate = useNavigate();
-  const handleClick = () => navigate(to);
-
-  const compid = `${id}-view-source`;
-
-  return (
-    <button id={compid} className={srccss.groupCta} onClick={handleClick}>
-      <b id={`${compid}-text`} className={srccss.groupCtaText}>
-        Selengkapnya
-      </b>
-      <img id={`${compid}-icon`} className={srccss.groupCtaIcon} alt="View More" src="/svg/arrow-right.svg" />
-    </button>
-  );
-};
-
-export const TabButtonGen = ({ id, text, type = "route", path, targetId, startContent, endContent }) => {
+export const TabButtonGen = ({ id, text, type = "route", onClick = () => {}, path, targetId, startContent, endContent }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { scroll } = useEvent();
@@ -68,6 +51,7 @@ export const TabButtonGen = ({ id, text, type = "route", path, targetId, startCo
 
   const handleClick = () => {
     if (type === "scroll") scroll(targetId, -70);
+    else if (type === "href") onClick();
     else navigate(path);
   };
 
@@ -105,7 +89,7 @@ const TabButton = ({ id, text, path, type = "single", subTabData = [], startCont
       {subTabOpen && subTabData.length > 0 && (
         <section className={tabcss.tabSub}>
           {subTabData.map((item, index) => (
-            <Link key={index} className={tabcss.tabSubButton} to={`/dashboard/${path}/${toPathname(item.submenu)}`}>
+            <Link key={index} className={tabcss.tabSubButton} to={`/${path}/${toPathname(item.submenu)}`}>
               <b className={tabcss.tabSubButtonText}>{toTitleCase(item.submenu)}</b>
             </Link>
           ))}
