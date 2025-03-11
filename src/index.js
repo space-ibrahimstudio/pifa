@@ -5,7 +5,6 @@ import { HelmetProvider } from "react-helmet-async";
 import { IbrahimStudioProvider } from "@ibrahimstudio/react";
 import { ApiProvider } from "./libs/plugins/apis";
 import { LoadingProvider } from "./components/feedback/loader";
-import { AuthProvider } from "./libs/guards/auth";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
@@ -34,9 +33,7 @@ root.render(
         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <LoadingProvider>
             <ApiProvider>
-              <AuthProvider>
-                <App />
-              </AuthProvider>
+              <App />
             </ApiProvider>
           </LoadingProvider>
         </BrowserRouter>
@@ -45,10 +42,7 @@ root.render(
   </React.StrictMode>
 );
 
-if (process.env.NODE_ENV === "production") {
-  reportWebVitals(sendtoGA);
-} else {
-  reportWebVitals(sendtoLog);
-}
+if (process.env.NODE_ENV === "production") reportWebVitals(sendtoGA);
+else reportWebVitals(sendtoLog);
 
 serviceWorkerRegistration.register();

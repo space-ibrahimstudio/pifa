@@ -158,7 +158,7 @@ export const Container = ({ id, display = "flex", flex = "unset", cwidth = "unse
   );
 };
 
-const Page = ({ pageid, isFullscreen = false, type = "public", children }) => {
+const Page = ({ pageid, isFullscreen = false, children }) => {
   const pagestyles = {
     width: "100%",
     position: "relative",
@@ -173,7 +173,7 @@ const Page = ({ pageid, isFullscreen = false, type = "public", children }) => {
 
   return (
     <main id={pageid} style={pagestyles}>
-      {!isFullscreen && <Navbar id={pageid} parentType={type} />}
+      {!isFullscreen && <Navbar id={pageid} />}
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           if (child.type === Fragment) {

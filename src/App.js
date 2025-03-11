@@ -1,7 +1,6 @@
 import React, { useEffect, Fragment } from "react";
 import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import WorkerUpdater from "./components/feedback/worker-updater";
-import FallbackPage from "./pages/fallback";
 import HomePage from "./pages/home";
 import ErrorPage from "./pages/error";
 import InsightPage from "./pages/insight";
@@ -34,12 +33,12 @@ function App() {
         <Route path="/berita/tag/:slug" element={<TagPage imgdomain={imgdomain} />} />
         <Route path="/pencarian/:query" element={<SearchPage imgdomain={imgdomain} />} />
         {/* no-index redirect */}
-        <Route path="/informasi" element={<FallbackPage from="/informasi" to="/informasi/pedoman-media-siber" />} />
-        <Route path="/berita/insight" element={<FallbackPage from="/berita/insight" to="/berita/insight/trending" />} />
-        <Route path="/berita/kategori" element={<FallbackPage from="/berita/kategori" to="/berita/kategori/pifabiz" />} />
-        <Route path="/berita" element={<FallbackPage from="/berita" to="/berita/insight/trending" />} />
-        <Route path="/berita/tag" element={<FallbackPage from="/berita/tag" to="/berita/tag/indonesia" />} />
-        <Route path="/pencarian" element={<FallbackPage from="/pencarian" to="/" />} />
+        <Route path="/informasi" element={<Navigate to="/informasi/pedoman-media-siber" />} />
+        <Route path="/berita/insight" element={<Navigate to="/berita/insight/trending" />} />
+        <Route path="/berita/kategori" element={<Navigate to="/berita/kategori/pifabiz" />} />
+        <Route path="/berita" element={<Navigate to="/berita/insight/trending" />} />
+        <Route path="/berita/tag" element={<Navigate to="/berita/tag/indonesia" />} />
+        <Route path="/pencarian" element={<Navigate to="/" />} />
         {/* common human assumption redirect */}
         <Route path="/about" element={<Navigate to="/informasi/tentang-pifa" replace />} />
         <Route path="/tentang" element={<Navigate to="/informasi/tentang-pifa" replace />} />
