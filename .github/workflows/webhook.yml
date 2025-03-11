@@ -1,6 +1,7 @@
 name: PIFA v0.1.0 (hook)
 
 on:
+  workflow_dispatch:
   repository_dispatch:
     types: [pifa-render-static]
 

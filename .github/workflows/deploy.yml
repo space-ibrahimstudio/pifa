@@ -1,9 +1,10 @@
 name: PIFA v0.1.0 (push || cron)
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch
+  # push:
+  #   branches:
+  #     - main
 
 jobs:
   web-deploy:
@@ -13,7 +14,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        page: [4000, 5000, 6000, 7000, 8000]
+        page: [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000]
 
     steps:
       - name: 1. Get latest code
