@@ -94,7 +94,9 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+          git stash --include-untracked
           git pull --rebase origin main
+          git stash pop || echo "No changes to pop"
 
           if git diff --quiet public/sitemap.xml; then
             echo "No changes detected in sitemap.xml. Skipping commit."
