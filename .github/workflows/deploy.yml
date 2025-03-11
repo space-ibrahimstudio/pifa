@@ -1,6 +1,7 @@
 name: PIFA v0.1.0 (push || cron)
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - admp
